@@ -1,0 +1,23 @@
+extends layout
+
+block content
+    form(action='/checkout', method='post')
+        input(type='hidden', name='repo', value=repo)
+        select(name='ref')
+            each tag in tags
+                option(value=tag)= tag
+        input(type='submit', value='Change tag')
+    table
+        thead
+            tr
+                th.name name
+                th.age age
+                th.message message
+        each item in items
+            tr
+                td.name= item.name
+                td.age= item.age
+                td.message= item.message
+                    | [
+                    a(href="mailto:" + item.author.email) #{item.author.name}
+                    | ]
