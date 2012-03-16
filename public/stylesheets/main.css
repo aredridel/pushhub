@@ -1,0 +1,32 @@
+.age, .name { width:140px; }
+.message { width: 600px; }
+
+tr th { text-align: left; }
+
+body {font-family: arial; }
+a { text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+
+@font-face {
+    font-family: 'EntypoRegular';
+    src: url('fonts/entypo-webfont.eot');
+    src: url('fonts/entypo-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/entypo-webfont.woff') format('woff'),
+         url('fonts/entypo-webfont.ttf') format('truetype'),
+         url('fonts/entypo-webfont.svg#EntypoRegular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.pictogram {
+    font-family: 'EntypoRegular';
+    font-size: 20px;
+    font-weight: normal;
+    vertical-align: middle;
+    line-height: 0;
+    margin-right: .1em;
+}
+
+.blob:after { content: "l"; font-size: 38px; }
+.tree:after { content: "s"; font-size: 30px; }

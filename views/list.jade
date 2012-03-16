@@ -19,7 +19,8 @@ block content
         each item in items
             tr
                 td.name
-                    a(href=item.url, class=item.type)= item.name
+                    span(class="pictogram " + item.type)
+                    a(href=item.url)= item.name
                 td.age= item.age
                 td.message= item.message
                     | [
