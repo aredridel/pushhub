@@ -1,3 +1,5 @@
+"use strict";
+
 var path = require('path');
 
 var pushover = require('pushover');
@@ -6,8 +8,8 @@ var express = require('express');
 var Repo = require('./lib/repo');
 var util = require('./lib/util');
 
-const GITROOT = '.pushstack';
-const GITURL = '/git/*';
+var GITROOT = '.pushstack';
+var GITURL = '/git/*';
 
 
 var repos = pushover(path.join(__dirname, GITROOT));
