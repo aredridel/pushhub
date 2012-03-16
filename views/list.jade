@@ -4,9 +4,12 @@ block content
     form(action='/checkout', method='post')
         input(type='hidden', name='repo', value=repo)
         select(name='ref')
-            each tag in tags
-                option(value=tag)= tag
-        input(type='submit', value='Change tag')
+            each branch in branches.list
+                if branch == branches.current
+                    option(value=branch, selected='selected')= branch
+                else
+                    option(value=branch)= branch
+        input(type='submit', value='Change branch')
     table
         thead
             tr
@@ -15,7 +18,8 @@ block content
                 th.message message
         each item in items
             tr
-                td.name= item.name
+                td.name
+                    a(href=item.url, class=item.type)= item.name
                 td.age= item.age
                 td.message= item.message
                     | [
