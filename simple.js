@@ -34,7 +34,6 @@ function updateLocalClone(dir) {
 //Local clone management
 function checkoutLocalClone(dir, ref, cb) {
     var target = util.getLocalClonePath(dir);
-    console.log('git checkout', ref, '| in ', target)
     var checkout = spawn('git', [ 'checkout', ref ], {'cwd': target});
     checkout.on('exit', function(code) {
         console.log('checkout exited with code: ' + code);
@@ -44,11 +43,6 @@ function checkoutLocalClone(dir, ref, cb) {
             cb('OUPS');
         }
     });
-}
-
-function proxyGitRequest(req, res) {
-    req.url = util.truncateHead(req.url);
-    repos.handle(req, res);
 }
 
     
@@ -65,41 +59,52 @@ app.use(express.bodyParser());
 app.use(express.favicon());
 app.set('view options', {layout: false});
 
-app.get(GITURL, proxyGitRequest);
-app.post(GITURL, proxyGitRequest);
+function proxyGitRequest(req, res) {
+    req.url = util.truncateHead(req.url);
+    repos.handle(req, res);
+}
 
-app.get('/:repo/:mode?/:entry?', function(req, res) {
-    var repo = new Repo(req.params.repo);
-
-    if(!req.params.mode || (req.params.mode == 'tree')) {
-        //TODO: Check if repo exists
-        //TODO: Check if resource exists
-        repo.list(req.params.entry || '', function(items, branches, tags) {
-            if(!items) {
-                res.render('404.jade');
-            }
-            res.local('repo', repo.name());
-            res.local('items', items);
-            res.local('branches', branches);
-            res.local('tags', tags);
-            res.render('list.jade', res.locals());
-        });
-
-    } else if(req.params.mode == 'blob') {
-        repo.display(req.params.entry, function(content) {
-            res.local('content', content);
-            res.render('display.jade', res.locals())
-        });
-    } else {
-        res.render('404.jade');
-    }
-});
-
-app.post('/checkout', function(req, res) {
+function checkoutRef(req, res) {
     var repo = new Repo(req.body.repo);
     repo.checkout(req.body.ref, function() {
         res.redirect('/' + req.body.repo + '/');
     });
-});
+}
+
+function list(req, res) {
+    var name = req.params.name || req.params[0],
+        entry = req.params[1] || '',
+        repo = new Repo(name);
+
+    console.log(entry, name)
+
+    repo.list(entry, function(items, branches, tags) {
+        if(!items) {
+            res.render('404.jade');
+        }
+        res.local('repo', name);
+        res.local('items', items);
+        res.local('branches', branches);
+        res.local('tags', tags);
+        res.render('list.jade', res.locals());
+    });
+}
+
+function display(req, res) {
+    var name = req.params[0],
+        entry = req.params[1],
+        repo = new Repo(name);
+
+    repo.display(entry, function(content) {
+        res.local('content', content);
+        res.render('display.jade', res.locals())
+    });
+}
+
+app.get('/:name/', list);
+app.get(/\/(\w+)\/tree\/([\w\/]+)/, list);
+app.get('/\/(\w+)\/blob\/([\w\/]+)/', display);
+app.post('/checkout', checkoutRef);
+app.all(GITURL, proxyGitRequest);
 
 app.listen(7000);
