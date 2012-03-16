@@ -1,0 +1,29 @@
+{
+    "name" : "pushstack",
+    "description" : "a front-end application for pushover",
+    "version" : "0.0.1",
+    "repository" : {
+        "type" : "git",
+        "url" : "git://github.com/shinuza/pushstack.git"
+    },
+    "keywords" : [
+        "git",
+        "push",
+        "deploy",
+        "http",
+        "web",
+        "repository"
+    ],
+    "dependencies" : {
+        "express" : "*",
+	"mime": "*",
+	"moment": "*",
+	"jade": "*",
+	"pushover": "*"
+    },
+    "engines" : {
+        "node" : ">=0.4.0"
+    },
+    "license" : "MIT"
+}
+
