@@ -1,4 +1,3 @@
-var util = require('util');
 var path = require('path');
 var cp = require('child_process');
 
@@ -6,7 +5,7 @@ var pushover = require('pushover');
 var express = require('express');
 
 var Repo = require('./lib/repo');
-var util = require('./lib/util');   
+var util = require('./lib/util');
 
 var spawn = cp.spawn;
 
@@ -45,7 +44,7 @@ function checkoutLocalClone(dir, ref, cb) {
     });
 }
 
-    
+
 var repos = pushover(path.join(__dirname, GITROOT));
 repos.on('create', function create(dir) {
     util.createLocalClone(dir);
@@ -76,7 +75,7 @@ function list(req, res) {
         entry = req.params[1] || '',
         repo = new Repo(name);
 
-    console.log(entry, name)
+    console.log(entry, name);
 
     repo.list(entry, function(items, branches, tags) {
         if(!items) {
@@ -103,7 +102,7 @@ function display(req, res) {
 
 app.get('/:name/', list);
 app.get(/\/(\w+)\/tree\/([\w\/]+)/, list);
-app.get('/\/(\w+)\/blob\/([\w\/]+)/', display);
+app.get(/\/(\w+)\/blob\/([\w\/]+)/, display);
 app.post('/checkout', checkoutRef);
 app.all(GITURL, proxyGitRequest);
 
