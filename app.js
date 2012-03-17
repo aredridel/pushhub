@@ -11,7 +11,6 @@ var util = require('./lib/util');
 var format = require('util').format;
 
 var GITROOT = '.pushstack';
-var GITURL = '/git/*';
 
 var repos = pushover(path.join(__dirname, GITROOT));
 repos.on('create', util.createLocalClone.bind(util));
@@ -36,7 +35,7 @@ function makePreview(url, data) {
     }
 }
 
-function gitRequest(req, res) {
+function handleGitRequest(req, res) {
     var parts = req.url.split('/');
     req.url = '/' + parts.slice(2).join('/');
     repos.handle(req, res);
@@ -97,6 +96,6 @@ app.get(/\/(\w+)\/tree\/([\w\/\.]+)/, tree);
 app.get(/\/(\w+)\/blob\/([\w\/\.]+)/, blob);
 app.get(/\/(\w+)\/raw\/([\w\/\.]+)/, raw);
 app.post('/checkout', checkoutRef);
-app.all(GITURL, gitRequest);
+app.all('/git/*', handleGitRequest);
 
 app.listen(7000);
