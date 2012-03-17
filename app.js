@@ -36,9 +36,9 @@ function makePreview(url, data) {
     }
 }
 
-function proxyGitRequest(req, res) {
-    //TODO: Should reverse the proxied URL
-    req.url = util.truncateHead(req.url);
+function gitRequest(req, res) {
+    var parts = req.url.split('/');
+    req.url = '/' + parts.slice(2).join('/');
     repos.handle(req, res);
 }
 
@@ -97,6 +97,6 @@ app.get(/\/(\w+)\/tree\/([\w\/\.]+)/, tree);
 app.get(/\/(\w+)\/blob\/([\w\/\.]+)/, blob);
 app.get(/\/(\w+)\/raw\/([\w\/\.]+)/, raw);
 app.post('/checkout', checkoutRef);
-app.all(GITURL, proxyGitRequest);
+app.all(GITURL, gitRequest);
 
 app.listen(7000);
