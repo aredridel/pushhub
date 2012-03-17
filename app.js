@@ -13,8 +13,8 @@ var GITURL = '/git/*';
 
 
 var repos = pushover(path.join(__dirname, GITROOT));
-repos.on('create', util.createLocalClone);
-repos.on('push', util.updateLocalClone);
+repos.on('create', util.createLocalClone.bind(util));
+repos.on('push', util.updateLocalClone.bind(util));
 
 var app = express.createServer();
 app.use(express.bodyParser());
@@ -22,6 +22,10 @@ app.use(express.favicon());
 app.use(express.static(path.join(__dirname, 'public')));
 app.set('view options', {layout: false});
 
+
+function makePreview(buf, type) {
+    return buf;
+}
 
 function proxyGitRequest(req, res) {
     //TODO: Should reverse the proxied URL
@@ -38,12 +42,12 @@ function checkoutRef(req, res) {
     });
 }
 
-function list(req, res) {
+function tree(req, res) {
     var name = req.params.name || req.params[0],
         entry = req.params[1] || '',
         repo = new Repo(name);
 
-    repo.list(entry, function(items, branches, tags) {
+    repo.tree(entry, function(items, branches, tags) {
         if(!items) {
             res.render('404.jade');
         }
@@ -55,20 +59,40 @@ function list(req, res) {
     });
 }
 
-function display(req, res) {
+function blob(req, res) {
     var name = req.params[0],
         entry = req.params[1],
         repo = new Repo(name);
 
-    repo.display(entry, function(content) {
-        res.local('content', content);
-        res.render('display.jade', res.locals())
+    repo.blob(entry, function(err, data) {
+        if(err) {
+            throw err;
+        }
+        res.local('repo', name);
+        res.local('preview', makePreview(data.buf, data.type));
+        res.render('display.jade', res.locals());
     });
 }
 
-app.get('/:name/', list);
-app.get(/\/(\w+)\/tree\/([\w\/]+)/, list);
-app.get(/\/(\w+)\/blob\/([\w\/]+)/, display);
+function raw(req, res) {
+    var name = req.params[0],
+        entry = req.params[1],
+        repo = new Repo(name);
+
+    repo.blob(entry, function(err, data) {
+        if(err) {
+            throw err;
+        }
+        res.setHeader('content-type', data.type);
+        res.send(data.buf);
+        res.end();
+    });
+}
+
+app.get('/:name/', tree);
+app.get(/\/(\w+)\/tree\/([\w\/\.]+)/, tree);
+app.get(/\/(\w+)\/blob\/([\w\/\.]+)/, blob);
+app.get(/\/(\w+)\/raw\/([\w\/\.]+)/, raw);
 app.post('/checkout', checkoutRef);
 app.all(GITURL, proxyGitRequest);
 
