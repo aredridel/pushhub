@@ -23,8 +23,21 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.set('view options', {layout: false});
 
 
-function makePreview(buf, type) {
-    return buf;
+function makePreview(url, data) {
+    var className = '',
+        rawURL = url.replace('blob', 'raw');
+
+    //(~data.type.indexOf('text/'))
+
+    if(~data.type.indexOf('image/')) {
+        return '<div>' +
+                   '<img src="' + rawURL + '">' +
+               '</div>';
+    } else {
+        return '<pre class="' + className +'">' +
+                   data.toString() +
+               '</pre>';
+    }
 }
 
 function proxyGitRequest(req, res) {
@@ -48,9 +61,7 @@ function tree(req, res) {
         repo = new Repo(name);
 
     repo.tree(entry, function(items, branches, tags) {
-        if(!items) {
-            res.render('404.jade');
-        }
+        if(!items) { res.render('404.jade'); }
         res.local('repo', name);
         res.local('items', items);
         res.local('branches', branches);
@@ -65,11 +76,9 @@ function blob(req, res) {
         repo = new Repo(name);
 
     repo.blob(entry, function(err, data) {
-        if(err) {
-            throw err;
-        }
+        if(err) { throw err; }
         res.local('repo', name);
-        res.local('preview', makePreview(data.buf, data.type));
+        res.local('preview', makePreview(req.url, data));
         res.render('display.jade', res.locals());
     });
 }
@@ -80,11 +89,9 @@ function raw(req, res) {
         repo = new Repo(name);
 
     repo.blob(entry, function(err, data) {
-        if(err) {
-            throw err;
-        }
+        if(err) { throw err; }
         res.setHeader('content-type', data.type);
-        res.send(data.buf);
+        res.send(data);
         res.end();
     });
 }
