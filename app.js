@@ -8,9 +8,10 @@ var express = require('express');
 var Repo = require('./lib/repo');
 var util = require('./lib/util');
 
+var format = require('util').format;
+
 var GITROOT = '.pushstack';
 var GITURL = '/git/*';
-
 
 var repos = pushover(path.join(__dirname, GITROOT));
 repos.on('create', util.createLocalClone.bind(util));
@@ -26,17 +27,12 @@ app.set('view options', {layout: false});
 function makePreview(url, data) {
     var className = '',
         rawURL = url.replace('blob', 'raw');
-
     //(~data.type.indexOf('text/'))
 
     if(~data.type.indexOf('image/')) {
-        return '<div>' +
-                   '<img src="' + rawURL + '">' +
-               '</div>';
+        return format('<div><img src="%s"></div>', rawURL);
     } else {
-        return '<pre class="' + className +'">' +
-                   data.toString() +
-               '</pre>';
+        return format('<pre class="%s">%s</pre>', className, data.toString());
     }
 }
 
