@@ -6,7 +6,7 @@ var pushover = require('pushover');
 var express = require('express');
 
 var Repo = require('./lib/repo');
-var util = require('./lib/util');
+var util = require('./lib/util'); // TODO: Rename this clone
 
 var format = require('util').format;
 
