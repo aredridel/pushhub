@@ -12,16 +12,6 @@ var format = require('util').format;
 
 var GITROOT = '.pushstack';
 
-var repos = pushover(path.join(__dirname, GITROOT));
-repos.on('create', util.createLocalClone.bind(util));
-repos.on('push', util.updateLocalClone.bind(util));
-
-var app = express.createServer();
-app.use(express.bodyParser());
-app.use(express.favicon());
-app.use(express.static(path.join(__dirname, 'public')));
-app.set('view options', {layout: false});
-
 
 function makePreview(url, data) {
     var className = '',
@@ -90,6 +80,16 @@ function raw(req, res) {
         res.end();
     });
 }
+
+var repos = pushover(path.join(__dirname, GITROOT));
+repos.on('create', util.createLocalClone.bind(util));
+repos.on('push', util.updateLocalClone.bind(util));
+
+var app = express.createServer();
+app.use(express.bodyParser());
+app.use(express.favicon());
+app.use(express.static(path.join(__dirname, 'public')));
+app.set('view options', {layout: false});
 
 app.get('/:name/', tree);
 app.get(/\/(\w+)\/tree\/([\w\/\.]+)/, tree);
