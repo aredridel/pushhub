@@ -11,11 +11,6 @@
 	border-color: #969696 !important;
 	background-color: #FFFFFF !important;
 }
-.sunlight-highlighted, .sunlight-container, .sunlight-container textarea {
-	font-family: Consolas, Inconsolata, Monaco, "Courier New" !important;
-	font-size: 12px !important;
-	line-height: 15px !important;
-}
 .sunlight-highlighted, .sunlight-container textarea {
 	color: #000000 !important;
 	margin: 0 !important;
@@ -38,18 +33,22 @@
 .sunlight-highlighted * {
 	background: transparent;
 }
+.code {
+	padding: 10px 0 !important;
+}
 .sunlight-line-number-margin {
 	float: left !important;
 	margin-right: 5px !important;
 	margin-top: 0 !important;
 	margin-bottom: 0 !important;
-	padding: 0 !important;
+	padding: 10px 0 !important;
 	padding-right: 4px !important;
 	padding-left: 4px !important;
 	border-right: 1px solid #CCCCCC !important;
 	background-color: #EEEEEE !important;
 	color: #848484 !important;
 	text-align: right !important;
+	line-height: 16px;
 	position: relative;
 	z-index: 3;
 }
@@ -113,7 +112,7 @@
 .sunlight-binaryLongString,
 .sunlight-verbatimString,
 .sunlight-diff .sunlight-removed {
-	color: #990000 !important;
+	color: #D14 !important;
 }
 
 .sunlight-ident,
@@ -134,7 +133,7 @@
 .sunlight-number,
 .sunlight-guid,
 .sunlight-cdata {
-	color: #CC6600 !important;
+	color: #099 !important;
 }
 
 .sunlight-named-ident,
@@ -161,7 +160,7 @@
 .sunlight-xml .sunlight-tagName,
 .sunlight-xml .sunlight-operator,
 .sunlight-diff .sunlight-modified {
-	color: #0000FF !important;
+	color: #333 !important; font-weight: bold;
 }
 .sunlight-shortOpenTag,
 .sunlight-openTag,
