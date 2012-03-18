@@ -15,7 +15,7 @@ function makePreview(url, data) {
     var className = '',
         rawURL = url.replace('blob', 'raw');
 
-    if(~data.type.indexOf('image/')) {
+    if(~data.mime.indexOf('image/')) {
         return format('<div><img src="%s"></div>', rawURL);
     } else {
         return format('<pre class="%s">%s</pre>', className, data.toString());
@@ -86,7 +86,7 @@ function raw(req, res) {
 
     repo.blob(entry, function(err, data) {
         if(err) { throw err; }
-        res.setHeader('content-type', data.type);
+        res.setHeader('content-type', data.mime);
         res.send(data);
         res.end();
     });
