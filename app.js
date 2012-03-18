@@ -17,8 +17,7 @@ function makePreview(url, data) {
     if(~data.mime.indexOf('image/')) {
         return format('<div><img src="%s"></div>', rawURL);
     } else {
-        return format('<pre data-mime="%s" data-extension="%s" class="code">%s</pre>',
-            data.mime, path.extname(url), data.toString());
+        return format('<pre data-extension="%s" class="code">%s</pre>', path.extname(url), data.toString());
     }
 }
 

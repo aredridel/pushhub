@@ -128,7 +128,7 @@
 .sunlight-nginx .sunlight-ssiCommand,
 .sunlight-sln .sunlight-formatDeclaration,
 .sunlight-diff .sunlight-added {
-	color: #009900 !important;
+	color: #998 !important; font-style: italic;
 }
 .sunlight-number,
 .sunlight-guid,
@@ -261,13 +261,13 @@
 	color: #0099FF !important;
 }
 .sunlight-css .sunlight-keyword {
-	color: #4E65B8 !important;
+	color: #333 !important;  font-weight: bold;
 }
 .sunlight-css .sunlight-class {
-	color: #FF0000 !important;
+	color: #458 !important; font-weight: bold;
 }
 .sunlight-css .sunlight-id {
-	color: #8A8E13 !important;
+	color: #900 !important; font-weight: bold;
 }
 .sunlight-css .sunlight-pseudoClass,
 .sunlight-css .sunlight-pseudoElement {
