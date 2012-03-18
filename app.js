@@ -6,17 +6,14 @@ var pushover = require('pushover');
 var express = require('express');
 
 var Repo = require('./lib/repo');
-var util = require('./lib/util'); // TODO: Rename this clone
+var settings = require('./settings');
 
 var format = require('util').format;
-
-var GITROOT = '.pushstack';
 
 
 function makePreview(url, data) {
     var className = '',
         rawURL = url.replace('blob', 'raw');
-    //(~data.type.indexOf('text/'))
 
     if(~data.type.indexOf('image/')) {
         return format('<div><img src="%s"></div>', rawURL);
@@ -32,18 +29,24 @@ function handleGitRequest(req, res) {
 }
 
 function checkoutRef(req, res) {
-    var name = req.body.repo,
-        repo = new Repo(name);
+    var repo = repos[req.body.repo];
+    if(!repo) {
+        return res.render('404.jade');
+    }
 
     repo.checkout(req.body.ref, function() {
-        res.redirect('/' + name + '/');
+        res.redirect('/' + req.body.repo + '/');
     });
 }
 
 function tree(req, res) {
     var name = req.params.name || req.params[0],
         entry = req.params[1] || '',
-        repo = new Repo(name);
+        repo = repos[name];
+
+    if(!repo) {
+        return res.render('404.jade');
+    }
 
     repo.tree(entry, function(items, branches, tags) {
         if(!items) { res.render('404.jade'); }
@@ -58,7 +61,11 @@ function tree(req, res) {
 function blob(req, res) {
     var name = req.params[0],
         entry = req.params[1],
-        repo = new Repo(name);
+        repo = repos[name];
+
+    if(!repo) {
+        return res.render('404.jade');
+    }
 
     repo.blob(entry, function(err, data) {
         if(err) { throw err; }
@@ -71,7 +78,11 @@ function blob(req, res) {
 function raw(req, res) {
     var name = req.params[0],
         entry = req.params[1],
-        repo = new Repo(name);
+        repo = repos[name];
+
+    if(!repo) {
+        return res.render('404.jade');
+    }
 
     repo.blob(entry, function(err, data) {
         if(err) { throw err; }
@@ -81,9 +92,24 @@ function raw(req, res) {
     });
 }
 
-var repos = pushover(path.join(__dirname, GITROOT));
-repos.on('create', util.createLocalClone.bind(util));
-repos.on('push', util.updateLocalClone.bind(util));
+var repos = {};
+
+var gitServer = pushover(settings.GITROOT, {'checkout': true});
+
+gitServer.list(function(err, dirs) {
+    if(err) {throw err;}
+    dirs.forEach(function(dir) {
+        repos[dir] = new Repo(dir);
+    });
+});
+
+gitServer.on('create', function(dir) {
+    repos[dir] = new Repo(dir);
+});
+
+gitServer.on('push', function(dir) {
+    repos[dir].update();
+});
 
 var app = express.createServer();
 app.use(express.bodyParser());
