@@ -3,6 +3,14 @@ html
     head
         title Listing #{repo}
         link(rel="stylesheet", type="text/css", href="/stylesheets/main.css")
+        link(rel="stylesheet", type="text/css", href="/stylesheets/sunlight.default.css")
     body
         block content
-
+        script(src="/javascripts/sunlight-all-min.js")
+        script(src="/javascripts/sunlight-extension-map.js")
+        script
+            var nodes = [].slice.apply(document.querySelectorAll('.code'));
+            nodes.forEach(function(node) {
+                node.classList.add('sunlight-highlight-' + Sunlight.ExtensionMap[node.dataset.extension]);
+            });
+            Sunlight.highlightAll();

@@ -12,13 +12,13 @@ var format = require('util').format;
 
 
 function makePreview(url, data) {
-    var className = '',
-        rawURL = url.replace('blob', 'raw');
+    var rawURL = url.replace('blob', 'raw');
 
     if(~data.mime.indexOf('image/')) {
         return format('<div><img src="%s"></div>', rawURL);
     } else {
-        return format('<pre class="%s">%s</pre>', className, data.toString());
+        return format('<pre data-mime="%s" data-extension="%s" class="code">%s</pre>',
+            data.mime, path.extname(url), data.toString());
     }
 }
 

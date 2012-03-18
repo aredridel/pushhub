@@ -3,7 +3,7 @@
 
 tr th { text-align: left; }
 
-body {font-family: arial; width:960px; margin: 0 auto; }
+body {font-family: helvetica, sans-serif; width:960px; margin: 0 auto; }
 a { text-decoration: none; }
 a:hover { text-decoration: underline; }
 
@@ -30,3 +30,5 @@ a:hover { text-decoration: underline; }
 
 .blob:after { content: "l"; font-size: 38px; }
 .tree:after { content: "s"; font-size: 30px; }
+
+.code { font-family: 'Bitstream Vera Sans Mono', Courier, monospace; font-size:12px; line-height: 16px; }
