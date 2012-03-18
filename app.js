@@ -25,7 +25,7 @@ function makePreview(url, data) {
 function handleGitRequest(req, res) {
     var parts = req.url.split('/');
     req.url = '/' + parts.slice(2).join('/');
-    repos.handle(req, res);
+    gitServer.handle(req, res);
 }
 
 function checkoutRef(req, res) {
@@ -94,7 +94,7 @@ function raw(req, res) {
 
 var repos = {};
 
-var gitServer = pushover(settings.GITROOT, {'checkout': true});
+var gitServer = pushover(settings.GITROOT);
 
 gitServer.list(function(err, dirs) {
     if(err) {throw err;}
@@ -105,6 +105,7 @@ gitServer.list(function(err, dirs) {
 
 gitServer.on('create', function(dir) {
     repos[dir] = new Repo(dir);
+    repos[dir].create();
 });
 
 gitServer.on('push', function(dir) {
