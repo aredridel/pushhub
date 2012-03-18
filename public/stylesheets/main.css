@@ -3,7 +3,7 @@
 
 tr th { text-align: left; }
 
-body {font-family: arial; }
+body {font-family: arial; width:960px; margin: 0 auto; }
 a { text-decoration: none; }
 a:hover { text-decoration: underline; }
 
