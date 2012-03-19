@@ -8,7 +8,6 @@ var pushover = require('pushover');
 var Repo = require('./lib/repo');
 var settings = require('./settings');
 
-var format = require('util').format;
 
 function parents(root, p) {
     var parts = p.split('/');
@@ -55,7 +54,7 @@ function tree(req, res) {
         res.local('items', items);
         res.local('branches', branches);
         res.local('tags', tags);
-        res.render('list.jade', res.locals());
+        res.render('tree.jade', res.locals());
     });
 }
 
@@ -75,7 +74,7 @@ function blob(req, res) {
         res.local('extension', path.extname(req.url));
         res.local('rawURL', req.url.replace('blob', 'raw'));
         res.local('data', data);
-        res.render('display.jade', res.locals());
+        res.render('blob.jade', res.locals());
     });
 }
 
