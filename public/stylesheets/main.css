@@ -1,12 +1,13 @@
-.age, .name { width:140px; }
-.message { width: 600px; }
+.name { width: 220px; }
+.age { width: 150px; }
+.message { width: 500px; }
 
 tr th { text-align: left; }
 
 body {font-family: helvetica, sans-serif; width:960px; margin: 0 auto; }
 a { text-decoration: none; }
 a:hover { text-decoration: underline; }
-
+.center { text-align:center; }
 
 @font-face {
     font-family: 'EntypoRegular';
@@ -27,6 +28,8 @@ a:hover { text-decoration: underline; }
     line-height: 0;
     margin-right: .1em;
 }
+
+.preview img { max-width: 100%;}
 
 .blob:after { content: "l"; font-size: 38px; }
 .tree:after { content: "s"; font-size: 30px; }

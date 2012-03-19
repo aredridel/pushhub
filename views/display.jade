@@ -3,4 +3,10 @@ extends layout
 block content
     include includes/breadcrumb
 
-    div !{preview}
+    div.preview
+        if data.mime.indexOf('image') == 0
+            div.center
+                img(src=rawURL)
+        else
+            pre(data-extension=extension, class='code')
+                =data.toString()

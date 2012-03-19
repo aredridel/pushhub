@@ -2,24 +2,13 @@
 
 var path = require('path');
 
-var pushover = require('pushover');
 var express = require('express');
+var pushover = require('pushover');
 
 var Repo = require('./lib/repo');
 var settings = require('./settings');
 
 var format = require('util').format;
-
-
-function makePreview(url, data) {
-    var rawURL = url.replace('blob', 'raw');
-
-    if(~data.mime.indexOf('image/')) {
-        return format('<div><img src="%s"></div>', rawURL);
-    } else {
-        return format('<pre data-extension="%s" class="code">%s</pre>', path.extname(url), data.toString());
-    }
-}
 
 function parents(root, p) {
     var parts = p.split('/');
@@ -83,7 +72,9 @@ function blob(req, res) {
         if(err) { throw err; }
         res.local('repo', name);
         res.local('parents', parents(name, entry));
-        res.local('preview', makePreview(req.url, data));
+        res.local('extension', path.extname(req.url));
+        res.local('rawURL', req.url.replace('blob', 'raw'));
+        res.local('data', data);
         res.render('display.jade', res.locals());
     });
 }
@@ -132,9 +123,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.set('view options', {layout: false});
 
 app.get('/:name/', tree);
-app.get(/\/(\w+)\/tree\/([\w\/\.]+)/, tree);
-app.get(/\/(\w+)\/blob\/([\w\/\.]+)/, blob);
-app.get(/\/(\w+)\/raw\/([\w\/\.]+)/, raw);
+app.get(/\/(\w+)\/tree\/([\w\-\/\.]+)/, tree);
+app.get(/\/(\w+)\/blob\/([\w\-\/\.]+)/, blob);
+app.get(/\/(\w+)\/raw\/([\w\-\/\.]+)/, raw);
 app.post('/checkout', checkoutRef);
 app.all('/git/*', handleGitRequest);
 
