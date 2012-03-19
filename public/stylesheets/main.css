@@ -4,6 +4,7 @@ a { text-decoration: none; color: #4183c4; }
 a:hover { text-decoration: underline; }
 
 .center { text-align:center; }
+.context { display: table-cell; }
 
 @font-face {
     font-family: 'EntypoRegular';
@@ -27,6 +28,7 @@ a:hover { text-decoration: underline; }
 
 .blob:after { content: "l"; font-size: 38px; color: #666; }
 .tree:after { content: "s"; font-size: 38px; color:#7fabc7; }
+.ok:after { content: "W"; font-size: 30px; color: #96c7ae; margin-left: 5px; }
 
 .tree-list-wrapper, .preview { border: 3px solid #ddd; }
 

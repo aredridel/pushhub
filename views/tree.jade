@@ -1,17 +1,7 @@
 extends layout
 
 block content
-    form(action='/checkout', method='post')
-        input(type='hidden', name='repo', value=repo)
-        select(name='ref')
-            each branch in branches.list
-                if branch == branches.current
-                    option(value=branch, selected='selected')= branch
-                else
-                    option(value=branch)= branch
-        input(type='submit', value='Change branch')
-
-    include includes/breadcrumb
+    include includes/refswitch
 
     .tree-list-wrapper
         table.tree-list

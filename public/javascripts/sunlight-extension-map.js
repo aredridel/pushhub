@@ -4,7 +4,8 @@ Sunlight.ExtensionMap = {
     '.css': 'css',
     '.php': 'php',
     '.java': 'java',
-    '.html': 'html',
+    '.html': 'xml',
+    '.xml': 'xml',
     '.rb': 'ruby',
     '.sh': 'bash',
     '.py': 'python'

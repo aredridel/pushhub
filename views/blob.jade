@@ -1,8 +1,6 @@
 extends layout
 
 block content
-    include includes/breadcrumb
-
     div.preview
         if data.mime.indexOf('image') == 0
             img(src=rawURL)
