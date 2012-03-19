@@ -2,13 +2,11 @@
 .sunlight-container {
 	clear: both !important;
 	position: relative !important;
-	margin: 10px 0 !important;
 }
 .sunlight-code-container {
 	clear: both !important;
 	position: relative !important;
-	border: none;
-	border-color: #969696 !important;
+	border: 3px solid #ddd;
 	background-color: #FFFFFF !important;
 }
 .sunlight-highlighted, .sunlight-container textarea {

@@ -13,19 +13,21 @@ block content
 
     include includes/breadcrumb
 
-    table.tree
-        thead
-            tr
-                th.name name
-                th.age age
-                th.message message
-        each item in items
-            tr
-                td.name
-                    span(class="pictogram " + item.type)
-                    a(href=item.url)= item.name
-                td.age= item.age
-                td.message= item.message
-                    | [
-                    a(href="mailto:" + item.author.email) #{item.author.name}
-                    | ]
+    .tree-list-wrapper
+        table.tree-list
+            thead
+                tr
+                    th.name name
+                    th.age age
+                    th.message message
+            tbody
+                each item in items
+                    tr
+                        td.name
+                            span(class="pictogram " + item.type)
+                            a(href=item.url)= item.name
+                        td.age= item.age
+                        td.message= item.message
+                            [
+                            a(href="mailto:" + item.author.email) #{item.author.name}
+                            ]

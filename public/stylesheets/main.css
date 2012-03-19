@@ -1,12 +1,8 @@
-.name { width: 220px; }
-.age { width: 150px; }
-.message { width: 500px; }
+body {font-family: helvetica, sans-serif; width:960px; margin: 20px auto; }
 
-tr th { text-align: left; }
-
-body {font-family: helvetica, sans-serif; width:960px; margin: 0 auto; }
-a { text-decoration: none; }
+a { text-decoration: none; color: #4183c4; }
 a:hover { text-decoration: underline; }
+
 .center { text-align:center; }
 
 @font-face {
@@ -26,12 +22,25 @@ a:hover { text-decoration: underline; }
     font-weight: normal;
     vertical-align: middle;
     line-height: 0;
-    margin-right: .1em;
+    margin-right: 10px;
 }
 
-.preview img { max-width: 100%;}
+.blob:after { content: "l"; font-size: 38px; color: #666; }
+.tree:after { content: "s"; font-size: 38px; color:#7fabc7; }
 
-.blob:after { content: "l"; font-size: 38px; }
-.tree:after { content: "s"; font-size: 30px; }
+.tree-list-wrapper, .preview { border: 3px solid #ddd; }
+
+.tree-list { border-collapse: collapse; font-size: 12px; width: 100%; color: #444; }
+.tree-list th { text-align: left; height: 20px; background: #f9f9f9; border-bottom: 1px solid #ddd; }
+.tree-list td, .tree-list th { padding: 5px; }
+.tree-list tbody td { border:1px solid #f3f3f3; border-width: 1px 0 1px 0; padding: 7px 5px; }
+
+.breadcrumb { color: #888; }
+.breadcrumb span { color: #444; }
+
+.name { width: 220px; }
+.age { width: 150px; }
 
 .code { font-family: 'Bitstream Vera Sans Mono', Courier, monospace; font-size:12px; line-height: 16px; }
+
+.preview img { max-width: 100%; display: block; margin: 0 auto; }

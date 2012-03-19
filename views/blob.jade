@@ -5,8 +5,7 @@ block content
 
     div.preview
         if data.mime.indexOf('image') == 0
-            div.center
-                img(src=rawURL)
+            img(src=rawURL)
         else
             pre(data-extension=extension, class='code')
                 =data.toString()
