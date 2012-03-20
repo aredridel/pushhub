@@ -1,0 +1,9 @@
+.last-commit
+    span(class='pictogram clock')
+    span.label Latest commit to the #{branches.current} branch
+    div.commit
+        p.message
+            #{lastCommit.message}
+        p.authored
+            strong #{lastCommit.author.name}
+            span &nbsp; authored #{lastCommit.age}

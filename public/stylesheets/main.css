@@ -29,19 +29,25 @@ a:hover { text-decoration: underline; }
 .blob:after { content: "l"; font-size: 38px; color: #666; }
 .tree:after { content: "s"; font-size: 38px; color:#7fabc7; }
 .ok:after { content: "W"; font-size: 30px; color: #96c7ae; margin-left: 5px; }
+.clock:after { content: "N"; font-size: 30px; color: #666; }
 
 .tree-list-wrapper, .preview { border: 3px solid #ddd; }
 
-.tree-list { border-collapse: collapse; font-size: 12px; width: 100%; color: #444; }
+.tree-list { border-collapse: collapse; font-size: 13px; width: 100%; color: #444; }
 .tree-list th { text-align: left; height: 20px; background: #f9f9f9; border-bottom: 1px solid #ddd; }
 .tree-list td, .tree-list th { padding: 5px; }
 .tree-list tbody td { border:1px solid #f3f3f3; border-width: 1px 0 1px 0; padding: 7px 5px; }
+.tree-list .name { width: 220px; }
+.tree-list .age { width: 150px; }
+
+.last-commit { font-size: 13px; margin-bottom: 20px; }
+.last-commit .label { font-size:80%; }
+.last-commit p { margin: 0; padding: 5px; }
+.last-commit .commit { border-radius: 3px; border: 1px solid #ccc; margin-top: 10px; }
+.last-commit .message { background: #eaeeff; }
 
 .breadcrumb { color: #888; }
 .breadcrumb span { color: #444; }
-
-.name { width: 220px; }
-.age { width: 150px; }
 
 .code { font-family: 'Bitstream Vera Sans Mono', Courier, monospace; font-size:12px; line-height: 16px; }
 

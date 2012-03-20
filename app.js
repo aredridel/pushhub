@@ -38,6 +38,21 @@ function checkoutRef(req, res) {
     });
 }
 
+function getLastCommit(req, res, next) {
+    var name = req.params.name,
+        repo = repos[name];
+
+    if(!repo) {
+        return res.render('404.jade');
+    }
+
+    repo.getLastCommit(function(err, commit) {
+        if(err) throw err;
+        res.local('lastCommit', commit);
+        next();
+    });
+}
+
 function tree(req, res) {
     var name = req.params.name || req.params[0],
         entry = req.params[1] || '',
@@ -121,7 +136,7 @@ app.use(express.favicon());
 app.use(express.static(path.join(__dirname, 'public')));
 app.set('view options', {layout: false});
 
-app.get('/:name/', tree);
+app.get('/:name/', getLastCommit, tree);
 app.get(/\/(\w+)\/tree\/([\w\-\/\.]+)/, tree);
 app.get(/\/(\w+)\/blob\/([\w\-\/\.]+)/, blob);
 app.get(/\/(\w+)\/raw\/([\w\-\/\.]+)/, raw);
