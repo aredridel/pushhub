@@ -1,6 +1,7 @@
+- Authentication
+- Refactoring
 - Tag caching
 - Branch caching
-- Authentication
 - Tabs
 - cli
 - Description editing

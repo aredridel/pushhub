@@ -4,7 +4,9 @@ a { text-decoration: none; color: #4183c4; }
 a:hover { text-decoration: underline; }
 
 .center { text-align:center; }
-.context { display: table-cell; }
+.context { display: inline-block; width: 100%; }
+.unit { float: left; }
+.unit-right { float: right; }
 
 @font-face {
     font-family: 'EntypoRegular';
@@ -46,7 +48,7 @@ a:hover { text-decoration: underline; }
 .last-commit .commit { border-radius: 3px; border: 1px solid #ccc; margin-top: 10px; }
 .last-commit .message { background: #eaeeff; }
 
-.breadcrumb { color: #888; }
+.breadcrumb { color: #888; margin-top: 0; }
 .breadcrumb span { color: #444; }
 
 .code { font-family: 'Bitstream Vera Sans Mono', Courier, monospace; font-size:12px; line-height: 16px; }

@@ -1,10 +1,9 @@
-div
-    h2.breadcrumb
-        a(href='/' + repo + '/') #{repo}
-        &nbsp;/
-        each parent in parents
-            if !parent.isLast
-                 a(href=parent.url) #{parent.label}
-                 &nbsp;/
-            else
-                span= parent.label
+h2.breadcrumb
+    a(href='/' + repo + '/') #{repo}
+    &nbsp;/
+    each parent in parents
+        if !parent.isLast
+             a(href=parent.url) #{parent.label}
+             &nbsp;/
+        else
+            span= parent.label
