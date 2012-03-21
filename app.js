@@ -38,6 +38,7 @@ function checkoutRef(req, res) {
     });
 }
 
+//TODO: Merge with tree and cache
 function getLastCommit(req, res, next) {
     var name = req.params.name,
         repo = repos[name];
@@ -128,6 +129,8 @@ gitServer.on('create', function(dir) {
 
 gitServer.on('push', function(dir) {
     repos[dir].update();
+    repos[dir].cache.flush('tags');
+    repos[dir].cache.flush('branches');
 });
 
 var app = express.createServer();

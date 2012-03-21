@@ -1,7 +1,6 @@
-- Refactoring
-- Tag caching
-- Branch caching
 - Tabs
+- Refactoring
+- Last commit caching
 - cli
 - Description editing
 - Export tar.gz
