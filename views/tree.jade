@@ -3,7 +3,7 @@ extends layout
 block content
     include includes/quick-nav
 
-    if typeof lastCommit != 'undefined'
+    if typeof last != 'undefined'
         include includes/lastcommit
 
     .tree-list-wrapper
@@ -19,8 +19,8 @@ block content
                         td.name
                             span(class="pictogram " + item.type)
                             a(href=item.url)= item.name
-                        td.age= item.age
-                        td.message= item.message
+                        td.age= item.commits.age
+                        td.message= item.commits.last().message
                             [
-                            a(href="mailto:" + item.author.email) #{item.author.name}
+                            a(href="mailto:" + item.commits.last().author.email) #{item.commits.last().author.name}
                             ]

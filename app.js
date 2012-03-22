@@ -27,6 +27,7 @@ function handleGitRequest(req, res) {
     gitServer.handle(req, res);
 }
 
+// TODO: this must die
 function checkoutRef(req, res) {
     var repo = repos[req.body.repo];
     if(!repo) {
@@ -47,14 +48,14 @@ function tree(req, res) {
         return res.render('404.jade');
     }
 
-    repo.tree(entry, function(items, branches, tags, lastCommit) {
+    repo.tree(entry, function(items, branches, tags, last) {
         if(!items) { res.render('404.jade'); }
         res.local('repo', name);
         res.local('parents', parents(name, entry));
         res.local('items', items);
         res.local('branches', branches);
         res.local('tags', tags);
-        res.local('lastCommit', lastCommit);
+        res.local('last', last);
         res.render('tree.jade', res.locals());
     });
 }
@@ -90,11 +91,34 @@ function raw(req, res) {
 
     repo.blob(entry, function(err, data) {
         if(err) { throw err; }
+        // TODO: Refactor this
         res.setHeader('content-type', data.mime);
         res.send(data);
         res.end();
     });
 }
+
+function commits(req, res) {
+    var name = req.params.name,
+        page = req.query['page'] | 0,
+        skip = 0,
+        repo = repos[name];
+
+    if(page > 0 && page < commits.maxpage) {
+      skip = (page - 1) * commits.bypage;
+    }
+
+    if(!repo) {
+        return res.render('404.jade');
+    }
+
+    // TODO: Change API, make max and skip optional
+    repo.commits('/', '.', commits.maxpage, skip, function(err, commits) {
+        res.render('commits.jade', commits);
+    });
+}
+commits.bypage = 10;
+commits.maxpage = 100000;
 
 var repos = {};
 

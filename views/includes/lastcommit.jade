@@ -3,7 +3,7 @@
     span.label Latest commit to the <strong>#{branches.current}</strong> branch
     div.commit
         p.message
-            #{lastCommit.message}
+            #{last.message}
         p.authored
-            strong #{lastCommit.author.name}
-            span &nbsp; authored #{lastCommit.age}
+            strong #{last.author.name}
+            span &nbsp; authored #{last.date}
