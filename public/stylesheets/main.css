@@ -8,6 +8,8 @@ a:hover { text-decoration: underline; }
 .unit { float: left; }
 .unit-right { float: right; }
 
+.margin-bottom { margin-bottom: 10px; }
+
 @font-face {
     font-family: 'EntypoRegular';
     src: url('fonts/entypo-webfont.eot');
@@ -42,7 +44,7 @@ a:hover { text-decoration: underline; }
 .tree-list .name { width: 220px; }
 .tree-list .age { width: 150px; }
 
-.last-commit { font-size: 13px; margin-bottom: 20px; }
+.last-commit { clear:left; font-size: 13px; margin-bottom: 20px; }
 .last-commit .label { font-size:80%; }
 .last-commit p { margin: 0; padding: 5px; }
 .last-commit .commit { border-radius: 3px; border: 1px solid #ccc; margin-top: 10px; }
@@ -50,6 +52,15 @@ a:hover { text-decoration: underline; }
 
 .breadcrumb { color: #888; margin-top: 0; }
 .breadcrumb span { color: #444; }
+
+.quick-nav { border-bottom: 1px solid #ccc; padding-left:5px;}
+.quick-nav form { margin-top: 1px; }
+.quick-nav .tabs { padding: 0; margin: 0; margin-bottom: -1px; }
+.quick-nav .tabs a { color: #888; }
+.quick-nav .tabs .selected a { color: #333; }
+.quick-nav .tabs li:first-child { margin-left: 10px; }
+.quick-nav .tabs li { display: inline-block;  padding:9px 5px; margin-right: 5px; border-top-left-radius: 4px; border-top-right-radius: 4px; }
+.quick-nav .tabs li.selected { border:1px solid #ccc; border-bottom:0; background: #fff; }
 
 .code { font-family: 'Bitstream Vera Sans Mono', Courier, monospace; font-size:12px; line-height: 16px; }
 

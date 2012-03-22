@@ -1,0 +1,17 @@
+.quick-nav.margin-bottom
+    form(id='refswitch', action='/checkout', method='post')
+            input(type='hidden', name='repo', value=repo)
+            select(name='ref', id='ref', class='change', data-current=branches.current)
+                option(value="") Switch Branches/Tags
+                option(value="") --- Branches ---
+                each branch in branches.list
+                    option(value=branch)= branch
+                if tags.length
+                    option(value="") --- Tags ---
+                    each tag in tags
+                        option(value=tag)= tag
+    ul.tabs
+        li.selected
+            a(href='/' + repo + '/') Files
+        li
+            a(href='/' + repo + '/commits/') Commits
