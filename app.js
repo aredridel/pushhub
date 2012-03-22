@@ -38,22 +38,6 @@ function checkoutRef(req, res) {
     });
 }
 
-//TODO: Merge with tree and cache
-function getLastCommit(req, res, next) {
-    var name = req.params.name,
-        repo = repos[name];
-
-    if(!repo) {
-        return res.render('404.jade');
-    }
-
-    repo.getLastCommit(function(err, commit) {
-        if(err) throw err;
-        res.local('lastCommit', commit);
-        next();
-    });
-}
-
 function tree(req, res) {
     var name = req.params.name || req.params[0],
         entry = req.params[1] || '',
@@ -63,13 +47,14 @@ function tree(req, res) {
         return res.render('404.jade');
     }
 
-    repo.tree(entry, function(items, branches, tags) {
+    repo.tree(entry, function(items, branches, tags, lastCommit) {
         if(!items) { res.render('404.jade'); }
         res.local('repo', name);
         res.local('parents', parents(name, entry));
         res.local('items', items);
         res.local('branches', branches);
         res.local('tags', tags);
+        res.local('lastCommit', lastCommit);
         res.render('tree.jade', res.locals());
     });
 }
@@ -131,6 +116,7 @@ gitServer.on('push', function(dir) {
     repos[dir].update();
     repos[dir].cache.flush('tags');
     repos[dir].cache.flush('branches');
+    repos[dir].cache.flush('lastCommit');
 });
 
 var app = express.createServer();
@@ -139,7 +125,7 @@ app.use(express.favicon());
 app.use(express.static(path.join(__dirname, 'public')));
 app.set('view options', {layout: false});
 
-app.get('/:name/', getLastCommit, tree);
+app.get('/:name/', tree);
 app.get(/\/(\w+)\/tree\/([\w\-\/\.]+)/, tree);
 app.get(/\/(\w+)\/blob\/([\w\-\/\.]+)/, blob);
 app.get(/\/(\w+)\/raw\/([\w\-\/\.]+)/, raw);

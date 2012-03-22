@@ -1,6 +1,8 @@
 extends layout
 
 block content
+    include includes/quick-nav
+
     if typeof lastCommit != 'undefined'
         include includes/lastcommit
 
