@@ -48,7 +48,7 @@ function tree(req, res) {
         return res.render('404.jade');
     }
 
-    repo.tree(entry, function(items, branches, tags, last) {
+    repo.tree(entry, function(items, branches, tags, commit) {
         if(!items) { res.render('404.jade'); }
         //TODO: Use Locals
         res.local('repo', name);
@@ -56,7 +56,7 @@ function tree(req, res) {
         res.local('items', items);
         res.local('branches', branches);
         res.local('tags', tags);
-        res.local('commit', last);
+        res.local('commit', commit);
         res.render('tree.jade', res.locals());
     });
 }
