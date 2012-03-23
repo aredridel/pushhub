@@ -6,20 +6,9 @@ var express = require('express');
 var pushover = require('pushover');
 
 var Repo = require('./lib/repo');
+var utils = require('./lib/utils');
 var settings = require('./settings');
 
-
-function parents(root, p) {
-    var parts = p.split('/');
-    parts = parts.map(function(part, index) {
-        return {
-            'label': part,
-            'url': '/' + root + '/' + 'tree' + '/'  + parts.slice(0, index + 1).join('/')
-        };
-    });
-    parts[parts.length - 1].isLast = true;
-    return parts;
-}
 
 function handleGitRequest(req, res) {
     var parts = req.url.split('/');
@@ -48,15 +37,15 @@ function tree(req, res) {
         return res.render('404.jade');
     }
 
-    repo.tree(entry, function(items, branches, tags, commit) {
+    repo.tree(entry, function(items) {
         if(!items) { res.render('404.jade'); }
         res.render('tree.jade', {
             'repo': name,
-            'parents': parents(name, entry),
+            'parents': utils.parents(name, entry),
             'items': items,
-            'branches': branches,
-            'tags': tags,
-            'commit': commit
+            'branches': repo.cache.get('branches'),
+            'tags': repo.cache.get('tags'),
+            'commit': repo.cache.get('commit')
         });
     });
 }
@@ -74,7 +63,7 @@ function blob(req, res) {
         if(err) { throw err; }
         res.render('blob.jade', {
             'repo': name,
-            'parents': parents(name, entry),
+            'parents': utils.parents(name, entry),
             'extension': path.extname(req.url),
             'rawURL': req.url.replace('blob', 'raw'),
             'data': data
@@ -129,7 +118,10 @@ var gitServer = pushover(settings.GITROOT);
 gitServer.list(function(err, dirs) {
     if(err) {throw err;}
     dirs.forEach(function(dir) {
-        repos[dir] = new Repo(dir);
+        // TODO: this must die
+        if(dir != '.clones') {
+            repos[dir] = new Repo(dir);
+        }
     });
 });
 

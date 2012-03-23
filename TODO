@@ -1,4 +1,3 @@
-- Cache branches, tags on Repo instanciation
 - Remove Clone (Use `git ls-tree <branch>`)
 - Branch switch (Use `git log <branch> -n1 -- .`)
 - Logging
