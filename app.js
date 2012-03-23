@@ -50,12 +50,13 @@ function tree(req, res) {
 
     repo.tree(entry, function(items, branches, tags, last) {
         if(!items) { res.render('404.jade'); }
+        //TODO: Use Locals
         res.local('repo', name);
         res.local('parents', parents(name, entry));
         res.local('items', items);
         res.local('branches', branches);
         res.local('tags', tags);
-        res.local('last', last);
+        res.local('commit', last);
         res.render('tree.jade', res.locals());
     });
 }
@@ -71,6 +72,7 @@ function blob(req, res) {
 
     repo.blob(entry, function(err, data) {
         if(err) { throw err; }
+        //TODO: Use Locals
         res.local('repo', name);
         res.local('parents', parents(name, entry));
         res.local('extension', path.extname(req.url));
@@ -98,14 +100,14 @@ function raw(req, res) {
     });
 }
 
-function commits(req, res) {
+function history(req, res) {
     var name = req.params.name,
         page = req.query['page'] | 0,
         skip = 0,
         repo = repos[name];
 
-    if(page > 0 && page < commits.maxpage) {
-      skip = (page - 1) * commits.bypage;
+    if(page > 0 && page < history.maxpage) {
+      skip = (page - 1) * history.bypage;
     }
 
     if(!repo) {
@@ -113,12 +115,15 @@ function commits(req, res) {
     }
 
     // TODO: Change API, make max and skip optional
-    repo.commits('/', '.', commits.maxpage, skip, function(err, commits) {
-        res.render('commits.jade', commits);
+    repo.history('/', '.', history.maxpage, skip, function(err, entry) {
+        //TODO: Use Locals
+        res.local('repo', name);
+        res.local('history', entry.history.asArray());
+        res.render('history.jade', res.locals());
     });
 }
-commits.bypage = 10;
-commits.maxpage = 100000;
+history.bypage = 10;
+history.maxpage = 100000;
 
 var repos = {};
 
@@ -153,6 +158,7 @@ app.get('/:name/', tree);
 app.get(/\/(\w+)\/tree\/([\w\-\/\.]+)/, tree);
 app.get(/\/(\w+)\/blob\/([\w\-\/\.]+)/, blob);
 app.get(/\/(\w+)\/raw\/([\w\-\/\.]+)/, raw);
+app.get('/:name/commits', history);
 app.post('/checkout', checkoutRef);
 app.all('/git/*', handleGitRequest);
 

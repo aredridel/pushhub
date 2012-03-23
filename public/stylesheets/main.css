@@ -42,13 +42,13 @@ a:hover { text-decoration: underline; }
 .tree-list td, .tree-list th { padding: 5px; }
 .tree-list tbody td { border:1px solid #f3f3f3; border-width: 1px 0 1px 0; padding: 7px 5px; }
 .tree-list .name { width: 220px; }
-.tree-list .age { width: 150px; }
+.tree-list .date { width: 150px; }
 
-.last-commit { clear:left; font-size: 13px; margin-bottom: 20px; }
-.last-commit .label { font-size:80%; }
-.last-commit p { margin: 0; padding: 5px; }
-.last-commit .commit { border-radius: 3px; border: 1px solid #ccc; margin-top: 10px; }
-.last-commit .message { background: #eaeeff; }
+.commit { clear:left; font-size: 13px; margin-bottom: 20px; }
+.commit .label { font-size:80%; }
+.commit p { margin: 0; padding: 5px; }
+.commit .content { border-radius: 3px; border: 1px solid #ccc; margin-top: 10px; }
+.commit .message { background: #eaeeff; }
 
 .breadcrumb { color: #888; margin-top: 0; }
 .breadcrumb span { color: #444; }

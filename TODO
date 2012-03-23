@@ -1,7 +1,9 @@
-- Commits
-- Description editing
 - TODOs
-- Remove Clone
-- Export tar.gz
+- Name cleaning
+- Cache branches, tags on Repo instanciation
+- Remove Clone (Use git ls-tree)
+- Branch switch
 - Logging
 - CLI
+- Description editing
+- Export tar.gz

@@ -1,0 +1,10 @@
+.commit
+    if typeof branches != 'undefined'
+        span(class='pictogram clock')
+        span.label Latest commit to the <strong>#{branches.current}</strong> branch
+    .content
+        p.message
+            #{commit.message}
+        p.authored
+            strong #{commit.author.name}
+            span &nbsp; authored #{commit.date}

@@ -4,7 +4,7 @@ block content
     include includes/quick-nav
 
     if typeof last != 'undefined'
-        include includes/lastcommit
+        include includes/commit
 
     .tree-list-wrapper
         table.tree-list
@@ -19,8 +19,8 @@ block content
                         td.name
                             span(class="pictogram " + item.type)
                             a(href=item.url)= item.name
-                        td.age= item.commits.age
-                        td.message= item.commits.last().message
+                        td.date= item.head.date
+                        td.message= item.head.message
                             [
-                            a(href="mailto:" + item.commits.last().author.email) #{item.commits.last().author.name}
+                            a(href="mailto:" + item.head.author.email) #{item.head.author.name}
                             ]
