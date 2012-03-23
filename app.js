@@ -50,14 +50,14 @@ function tree(req, res) {
 
     repo.tree(entry, function(items, branches, tags, commit) {
         if(!items) { res.render('404.jade'); }
-        //TODO: Use Locals
-        res.local('repo', name);
-        res.local('parents', parents(name, entry));
-        res.local('items', items);
-        res.local('branches', branches);
-        res.local('tags', tags);
-        res.local('commit', commit);
-        res.render('tree.jade', res.locals());
+        res.render('tree.jade', {
+            'repo': name,
+            'parents': parents(name, entry),
+            'items': items,
+            'branches': branches,
+            'tags': tags,
+            'commit': commit
+        });
     });
 }
 
@@ -72,13 +72,13 @@ function blob(req, res) {
 
     repo.blob(entry, function(err, data) {
         if(err) { throw err; }
-        //TODO: Use Locals
-        res.local('repo', name);
-        res.local('parents', parents(name, entry));
-        res.local('extension', path.extname(req.url));
-        res.local('rawURL', req.url.replace('blob', 'raw'));
-        res.local('data', data);
-        res.render('blob.jade', res.locals());
+        res.render('blob.jade', {
+            'repo': name,
+            'parents': parents(name, entry),
+            'extension': path.extname(req.url),
+            'rawURL': req.url.replace('blob', 'raw'),
+            'data': data
+        });
     });
 }
 
@@ -93,10 +93,8 @@ function raw(req, res) {
 
     repo.blob(entry, function(err, data) {
         if(err) { throw err; }
-        // TODO: Refactor this
         res.setHeader('content-type', data.mime);
-        res.send(data);
-        res.end();
+        res.end(data);
     });
 }
 
@@ -114,12 +112,11 @@ function history(req, res) {
         return res.render('404.jade');
     }
 
-    // TODO: Change API, make max and skip optional
-    repo.history('/', '.', history.maxpage, skip, function(err, entry) {
-        //TODO: Use Locals
-        res.local('repo', name);
-        res.local('history', entry.history.asArray());
-        res.render('history.jade', res.locals());
+    repo.stats('.', history.maxpage, skip, function(err, entry) {
+        res.render('history.jade', {
+            'repo': name,
+            'history': entry.commits.asArray()
+        });
     });
 }
 history.bypage = 10;
