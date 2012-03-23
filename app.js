@@ -131,10 +131,9 @@ gitServer.on('create', function(dir) {
 });
 
 gitServer.on('push', function(dir) {
+    repos[dir].flush();
     repos[dir].update();
-    repos[dir].cache.flush('tags');
-    repos[dir].cache.flush('branches');
-    repos[dir].cache.flush('lastCommit');
+    repos[dir].cache();
 });
 
 var app = express.createServer();
