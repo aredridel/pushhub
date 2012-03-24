@@ -1,6 +1,8 @@
-- Remove Clone (Use `git ls-tree <branch>`)
 - Branch switch (Use `git log <branch> -n1 -- .`)
 - Logging
+- Factorise git commands
+
 - CLI
+
 - Description editing
 - Export tar.gz

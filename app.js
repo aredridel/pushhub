@@ -3,29 +3,19 @@
 var path = require('path');
 
 var express = require('express');
+var mime = require('mime');
 var pushover = require('pushover');
 
 var Repo = require('./lib/repo');
 var utils = require('./lib/utils');
-var settings = require('./settings');
+
+var GITROOT = path.join(__dirname, ".pushstack");
 
 
 function handleGitRequest(req, res) {
     var parts = req.url.split('/');
     req.url = '/' + parts.slice(2).join('/');
     gitServer.handle(req, res);
-}
-
-// TODO: this must die
-function checkoutRef(req, res) {
-    var repo = repos[req.body.repo];
-    if(!repo) {
-        return res.render('404.jade');
-    }
-
-    repo.checkout(req.body.ref, function() {
-        res.redirect('/' + req.body.repo + '/');
-    });
 }
 
 function tree(req, res) {
@@ -43,9 +33,9 @@ function tree(req, res) {
             'repo': name,
             'parents': utils.parents(name, entry),
             'items': items,
-            'branches': repo.cache.get('branches'),
-            'tags': repo.cache.get('tags'),
-            'commit': repo.cache.get('commit')
+            'branches': repo.get('branches'),
+            'tags': repo.get('tags'),
+            'commit': repo.get('commit')
         });
     });
 }
@@ -63,6 +53,7 @@ function blob(req, res) {
         if(err) { throw err; }
         res.render('blob.jade', {
             'repo': name,
+            'mime': mime.lookup(entry),
             'parents': utils.parents(name, entry),
             'extension': path.extname(req.url),
             'rawURL': req.url.replace('blob', 'raw'),
@@ -82,7 +73,9 @@ function raw(req, res) {
 
     repo.blob(entry, function(err, data) {
         if(err) { throw err; }
-        res.setHeader('content-type', data.mime);
+        var m = mime.lookup(entry);
+        if(m.indexOf('text') === 0) { m = 'text/plain'; }
+        res.setHeader('content-type', m);
         res.end(data);
     });
 }
@@ -113,26 +106,21 @@ history.maxpage = 100000;
 
 var repos = {};
 
-var gitServer = pushover(settings.GITROOT);
+var gitServer = pushover(GITROOT);
 
 gitServer.list(function(err, dirs) {
     if(err) {throw err;}
     dirs.forEach(function(dir) {
-        // TODO: this must die
-        if(dir != '.clones') {
-            repos[dir] = new Repo(dir);
-        }
+        repos[dir] = new Repo(path.join(GITROOT, dir));
     });
 });
 
 gitServer.on('create', function(dir) {
-    repos[dir] = new Repo(dir);
-    repos[dir].create();
+    repos[dir] = new Repo(path.join(GITROOT, dir));
 });
 
 gitServer.on('push', function(dir) {
     repos[dir].flush();
-    repos[dir].update();
     repos[dir].cache();
 });
 
@@ -147,7 +135,6 @@ app.get(/\/(\w+)\/tree\/([\w\-\/\.]+)/, tree);
 app.get(/\/(\w+)\/blob\/([\w\-\/\.]+)/, blob);
 app.get(/\/(\w+)\/raw\/([\w\-\/\.]+)/, raw);
 app.get('/:name/commits', history);
-app.post('/checkout', checkoutRef);
 app.all('/git/*', handleGitRequest);
 
 app.listen(7000);
