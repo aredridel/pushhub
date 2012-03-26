@@ -34,7 +34,6 @@ function tip(req, res, next) {
             next();
         });
     }
-
 }
 
 // /express/
@@ -110,6 +109,7 @@ function raw(req, res) {
 // /express/commits/2.x
 function history(req, res) {
     var name = req.params.name,
+        ref = req.params.ref,
         page = req.query['page'] | 0,
         skip = 0,
         repo = repos[name];
@@ -122,7 +122,7 @@ function history(req, res) {
         return res.render('404.jade');
     }
 
-    repo.stats('.', history.maxpage, skip, function(err, entry) {
+    repo.stats(ref, '.', history.maxpage, skip, function(err, entry) {
         res.render('history.jade', {
             'repo': name,
             'history': entry.commits.asArray()
