@@ -1,28 +1,32 @@
 {
-    "name" : "pushstack",
-    "description" : "a front-end application for pushover",
-    "version" : "0.0.1",
-    "repository" : {
-        "type" : "git",
-        "url" : "git://github.com/shinuza/pushstack.git"
+    "name": "pushstack",
+    "description": "a front-end application for pushover",
+    "version": "0.0.1",
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/shinuza/pushstack.git"
     },
-    "keywords" : [
+    "keywords": [
+        "versioning",
+        "dvcs",
         "git",
         "push",
-        "deploy",
         "http",
         "web",
         "repository"
     ],
-    "dependencies" : {
-        "express" : "*",
-        "mime": "*",
-        "jade": "*",
-        "pushover": "*"
+    "dependencies": {
+        "express": "2.5.8",
+        "mime": "1.2.4",
+        "jade": "0.20.1",
+        "pushover": "0.1.2"
     },
-    "engines" : {
-        "node" : ">=0.4.0"
+    "devDependencies": {
+        "debug": "0.6.0"
     },
-    "license" : "MIT"
+    "engines": {
+        "node": ">=0.4.0"
+    },
+    "license": "MIT"
 }
 
