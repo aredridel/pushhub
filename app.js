@@ -18,28 +18,49 @@ function handleGitRequest(req, res) {
     gitServer.handle(req, res);
 }
 
+
+function tip(req, res, next) {
+    var name = req.params.name,
+        ref = req.params.ref || 'master',
+        repo = repos[name];
+
+    if(repo) {
+        repo.tip(ref, function(err, tip) {
+            if(err) throw err;
+            res.local('commit', tip);
+            next();
+        });
+    }
+
+}
+
+// /express/
+// /express/tree/2.x
+// /express/tree/2.x/examples
 function tree(req, res) {
-    var name = req.params.name || req.params[0],
-        entry = req.params[1] || '',
+    var name = req.params.name,
+        ref = req.params.ref || 'master',
+        path = req.params[0] || '.',
         repo = repos[name];
 
     if(!repo) {
         return res.render('404.jade');
     }
 
-    repo.tree(entry, function(items) {
-        if(!items) { res.render('404.jade'); }
+    repo.tree(ref, path, function(err, items) {
+        if(err || !items) { res.render('404.jade'); }
         res.render('tree.jade', {
             'repo': name,
-            'parents': utils.parents(name, entry),
+            'ref': ref,
+            'parents': utils.parents(name, path),
             'items': items,
-            'branches': repo.get('branches'),
-            'tags': repo.get('tags'),
-            'commit': repo.get('commit')
+            'branches': repo.cache.get('branches'),
+            'tags': repo.cache.get('tags')
         });
     });
 }
 
+// /express/blob/2.x/.gitignore
 function blob(req, res) {
     var name = req.params[0],
         entry = req.params[1],
@@ -62,6 +83,7 @@ function blob(req, res) {
     });
 }
 
+// https://raw.github.com/visionmedia/express/2.x/.gitignore
 function raw(req, res) {
     var name = req.params[0],
         entry = req.params[1],
@@ -80,6 +102,7 @@ function raw(req, res) {
     });
 }
 
+// /express/commits/2.x
 function history(req, res) {
     var name = req.params.name,
         page = req.query['page'] | 0,
@@ -121,7 +144,7 @@ gitServer.on('create', function(dir) {
 
 gitServer.on('push', function(dir) {
     repos[dir].flush();
-    repos[dir].cache();
+    repos[dir].memoize();
 });
 
 var app = express.createServer();
@@ -130,11 +153,14 @@ app.use(express.favicon());
 app.use(express.static(path.join(__dirname, 'public')));
 app.set('view options', {layout: false});
 
-app.get('/:name/', tree);
-app.get(/\/(\w+)\/tree\/([\w\-\/\.]+)/, tree);
-app.get(/\/(\w+)\/blob\/([\w\-\/\.]+)/, blob);
-app.get(/\/(\w+)\/raw\/([\w\-\/\.]+)/, raw);
-app.get('/:name/commits', history);
-app.all('/git/*', handleGitRequest);
 
+app.get('/:name/', tip, tree);
+app.get('/:name/tree/:ref/', tip, tree);
+app.get('/:name/tree/:ref/*', tip, tree);
+app.get('/:name/blob/:ref/*', blob);
+app.get('/:name/raw/:ref/*', raw);
+app.get('/:name/commits/:ref', history);
+
+
+app.all('/git/*', handleGitRequest);
 app.listen(7000);

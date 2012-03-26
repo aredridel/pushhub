@@ -7,4 +7,5 @@ h2.breadcrumb
                  a(href=parent.url) #{parent.label}
                  &nbsp;/
             else
-                span= parent.label
+                if parent.label != '.'
+                    span= parent.label

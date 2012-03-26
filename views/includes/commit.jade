@@ -1,7 +1,7 @@
 .commit
-    if typeof branches != 'undefined'
+    if typeof ref != 'undefined'
         span(class='pictogram clock')
-        span.label Latest commit to the <strong>#{branches.current}</strong> branch
+        span.label Latest commit to <strong>#{ref}</strong>
     .content
         p.message
             #{commit.message}

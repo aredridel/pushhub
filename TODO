@@ -1,6 +1,11 @@
-- Branch switch (Use `git log <branch> -n1 -- .`)
-- Logging
+- Check and fix blob
+- Check and fix raw
+- Check and fix commit history
 - Factorise git commands
+- Templates cleaning
+
+- Logging
+- DropKick should drop dead
 
 - CLI
 

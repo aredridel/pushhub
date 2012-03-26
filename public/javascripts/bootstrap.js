@@ -7,13 +7,12 @@ $(function() {
     $('.change').dropkick({
       change: function (value, label) {
         if(value) {
-            $('#refswitch').submit();
+            document.location.pathname = '/' + this.data('repo') + '/tree/' + value + '/';
         }
       }
     });
 
     $('[data-dk-dropdown-value=""]').addClass('dk_option_current_custom');
-    $('[data-dk-dropdown-value="' + $('#ref').data('current') + '"]').append($('<span></span>').addClass('pictogram ok'));
     Sunlight.highlightAll();
 
 });

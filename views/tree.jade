@@ -19,8 +19,8 @@ block content
                         td.name
                             span(class="pictogram " + item.type)
                             a(href=item.url)= item.name
-                        td.date= item.head.date
-                        td.message= item.head.message
+                        td.date= item.tip.date
+                        td.message= item.tip.message
                             [
-                            a(href="mailto:" + item.head.author.email) #{item.head.author.name}
+                            a(href="mailto:" + item.tip.author.email) #{item.tip.author.name}
                             ]
