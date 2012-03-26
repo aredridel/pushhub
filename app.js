@@ -122,7 +122,8 @@ function history(req, res) {
         return res.render('404.jade');
     }
 
-    repo.stats(ref, '.', history.maxpage, skip, function(err, entry) {
+    repo.stats(ref, '.', history.bypage, skip, function(err, entry) {
+        if(err) { throw err; }
         res.render('history.jade', {
             'repo': name,
             'history': entry.commits.asArray()
