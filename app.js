@@ -9,7 +9,10 @@ var pushover = require('pushover');
 var Repo = require('./lib/repo');
 var utils = require('./lib/utils');
 
-var GITROOT = path.join(__dirname, ".pushstack");
+var join = path.join;
+var extname = path.extname;
+
+var GITROOT = join(__dirname, ".pushstack");
 
 
 function handleGitRequest(req, res) {
@@ -62,21 +65,22 @@ function tree(req, res) {
 
 // /express/blob/2.x/.gitignore
 function blob(req, res) {
-    var name = req.params[0],
-        entry = req.params[1],
+    var name = req.params.name,
+        ref = req.params.ref || 'master',
+        path = req.params[0],
         repo = repos[name];
 
     if(!repo) {
         return res.render('404.jade');
     }
 
-    repo.blob(entry, function(err, data) {
+    repo.blob(ref, path, function(err, data) {
         if(err) { throw err; }
         res.render('blob.jade', {
             'repo': name,
-            'mime': mime.lookup(entry),
-            'parents': utils.parents(name, entry),
-            'extension': path.extname(req.url),
+            'mime': mime.lookup(path),
+            'parents': utils.parents(name, path),
+            'extension': extname(req.url),
             'rawURL': req.url.replace('blob', 'raw'),
             'data': data
         });
@@ -85,17 +89,18 @@ function blob(req, res) {
 
 // https://raw.github.com/visionmedia/express/2.x/.gitignore
 function raw(req, res) {
-    var name = req.params[0],
-        entry = req.params[1],
+    var name = req.params.name,
+        ref = req.params.ref || 'master',
+        path = req.params[0],
         repo = repos[name];
 
     if(!repo) {
         return res.render('404.jade');
     }
 
-    repo.blob(entry, function(err, data) {
+    repo.blob(ref, path, function(err, data) {
         if(err) { throw err; }
-        var m = mime.lookup(entry);
+        var m = mime.lookup(path);
         if(m.indexOf('text') === 0) { m = 'text/plain'; }
         res.setHeader('content-type', m);
         res.end(data);
@@ -134,12 +139,12 @@ var gitServer = pushover(GITROOT);
 gitServer.list(function(err, dirs) {
     if(err) {throw err;}
     dirs.forEach(function(dir) {
-        repos[dir] = new Repo(path.join(GITROOT, dir));
+        repos[dir] = new Repo(join(GITROOT, dir));
     });
 });
 
 gitServer.on('create', function(dir) {
-    repos[dir] = new Repo(path.join(GITROOT, dir));
+    repos[dir] = new Repo(join(GITROOT, dir));
 });
 
 gitServer.on('push', function(dir) {
@@ -150,7 +155,7 @@ gitServer.on('push', function(dir) {
 var app = express.createServer();
 app.use(express.bodyParser());
 app.use(express.favicon());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(join(__dirname, 'public')));
 app.set('view options', {layout: false});
 
 
