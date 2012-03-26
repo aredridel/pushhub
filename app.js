@@ -11,6 +11,7 @@ var utils = require('./lib/utils');
 
 var join = path.join;
 var extname = path.extname;
+var debug = require('debug')('pushstack');
 
 var GITROOT = join(__dirname, ".pushstack");
 
@@ -36,9 +37,6 @@ function tip(req, res, next) {
     }
 }
 
-// /express/
-// /express/tree/2.x
-// /express/tree/2.x/examples
 function tree(req, res) {
     var name = req.params.name,
         ref = req.params.ref || 'master',
@@ -50,7 +48,7 @@ function tree(req, res) {
     }
 
     repo.tree(ref, path, function(err, items) {
-        if(err || !items) { res.render('404.jade'); }
+        if(err || !items) { return res.render('404.jade'); }
         res.render('tree.jade', {
             'repo': name,
             'ref': ref,
@@ -62,7 +60,6 @@ function tree(req, res) {
     });
 }
 
-// /express/blob/2.x/.gitignore
 function blob(req, res) {
     var name = req.params.name,
         ref = req.params.ref || 'master',
@@ -86,7 +83,6 @@ function blob(req, res) {
     });
 }
 
-// https://raw.github.com/visionmedia/express/2.x/.gitignore
 function raw(req, res) {
     var name = req.params.name,
         ref = req.params.ref || 'master',
@@ -106,7 +102,6 @@ function raw(req, res) {
     });
 }
 
-// /express/commits/2.x
 function history(req, res) {
     var name = req.params.name,
         ref = req.params.ref,
@@ -140,15 +135,18 @@ var gitServer = pushover(GITROOT);
 gitServer.list(function(err, dirs) {
     if(err) {throw err;}
     dirs.forEach(function(dir) {
+        debug('Adding "%s" to known repositories', dir);
         repos[dir] = new Repo(join(GITROOT, dir));
     });
 });
 
 gitServer.on('create', function(dir) {
+    debug('Creating "%s"', dir);
     repos[dir] = new Repo(join(GITROOT, dir));
 });
 
 gitServer.on('push', function(dir) {
+    debug('Pushed to "%s", flushing cache', dir);
     repos[dir].flush();
     repos[dir].memoize();
 });
@@ -160,7 +158,7 @@ app.use(express.static(join(__dirname, 'public')));
 app.set('view options', {layout: false});
 
 
-app.get('/:name/', tip, tree);
+app.get('/:name', tip, tree);
 app.get('/:name/tree/:ref/', tip, tree);
 app.get('/:name/tree/:ref/*', tip, tree);
 app.get('/:name/blob/:ref/*', blob);
