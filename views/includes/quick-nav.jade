@@ -1,21 +1,27 @@
 .quick-nav.margin-bottom
-    select(class='change', data-repo=repo)
-
-        option(value="") Switch Branches/Tags
-
-        option(value="") --- Branches ---
-        each branch in branches
-            if ref == branch
-                option(value=branch, class='selected')= branch
-            else
-                option(value=branch)= branch
-
-        option(value="") --- Tags ---
-        each tag in tags
-            if ref == tag
-                option(value=tag, class='selected')= tag
-            else
-                option(value=tag)= tag
+    .container
+        a.toggle(style='width: 150px;')
+            span.label Switch Branches/Tags
+        .options
+            ul.options-inner
+                li.option-title --- Branches ---
+                each branch in branches
+                    if ref == branch
+                        li.current
+                            span= branch
+                            span.pictogram.ok.
+                    else:
+                        li
+                            a(href='/' + repo +'/tree/' + branch + '/')= branch
+                li.option-title --- Tags ---
+                each tag in tags
+                    if ref == tag
+                        li.current
+                            span= tag
+                            span.pictogram.ok.
+                    else
+                        li
+                            a(href='/' + repo +'/tree/' + tag + '/')= tag
 
     ul.tabs
         li.selected

@@ -48,7 +48,7 @@ function tree(req, res) {
     }
 
     repo.tree(ref, path, function(err, items) {
-        if(err || !items) { return res.render('404.jade'); }
+        if(err || !items.length) { return res.render('404.jade'); }
         res.render('tree.jade', {
             'repo': name,
             'ref': ref,
