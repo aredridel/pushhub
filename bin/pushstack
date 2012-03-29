@@ -1,0 +1,8 @@
+#! /usr/bin/env node
+
+var app = require('../app');
+var PORT = process.argv[2] || 3000;
+var HOST = process.argv[3] || '0.0.0.0';
+
+console.log('Listening http://%s:%d', HOST, PORT);
+app.listen(PORT, HOST);

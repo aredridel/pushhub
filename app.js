@@ -13,18 +13,12 @@ var join = path.join;
 var extname = path.extname;
 var debug = require('debug')('pushstack');
 
+
 //TODO: Make this configurable
 var GITROOT = join(__dirname, ".pushstack");
 var HISTORY_BY_PAGE = 10;
 var HISTORY_MAX_PAGE = 100000;
 
-var repos = {};
-
-function handleGitRequest(req, res) {
-    var parts = req.url.split('/');
-    req.url = '/' + parts.slice(2).join('/');
-    gitServer.handle(req, res);
-}
 
 function tip(req, res, next) {
     var name = req.params.name,
@@ -134,6 +128,7 @@ function history(req, res) {
     }
 }
 
+var repos = {};
 var gitServer = pushover(GITROOT);
 
 gitServer.list(function(err, dirs) {
@@ -155,7 +150,7 @@ gitServer.on('push', function(dir) {
     repos[dir].memoize();
 });
 
-var app = express.createServer();
+var app = module.exports = express.createServer();
 app.use(express.bodyParser());
 app.use(express.favicon());
 app.use(express.static(join(__dirname, 'public')));
@@ -169,5 +164,7 @@ app.get('/:name/blob/:ref/*', blob);
 app.get('/:name/raw/:ref/*', raw);
 app.get('/:name/commits/:ref', history);
 
-
-app.all('/git/*', handleGitRequest);
+app.all('/git/*', function(req, res) {
+    req.url = req.url.replace(/\^[\/]*/, '');
+    gitServer.handle(req, res);
+});
