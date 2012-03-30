@@ -48,7 +48,7 @@ function tree(req, res) {
             res.render('tree.jade', {
                 'repo': name,
                 'ref': ref,
-                'parents': utils.parents(name, path),
+                'parents': utils.parents(name, ref, path),
                 'items': items,
                 'branches': repo.cache.get('branches'),
                 'tags': repo.cache.get('tags')
@@ -71,7 +71,7 @@ function blob(req, res) {
             res.render('blob.jade', {
                 'repo': name,
                 'mime': mime.lookup(path),
-                'parents': utils.parents(name, path),
+                'parents': utils.parents(name, ref, path),
                 'extension': extname(req.url),
                 'rawURL': req.url.replace('blob', 'raw'),
                 'data': data
