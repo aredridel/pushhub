@@ -20,6 +20,19 @@ var HISTORY_BY_PAGE = 10;
 var HISTORY_MAX_PAGE = 100000;
 
 
+var ExtensionMap = {
+    '': 'plaintext',
+    '.js': 'javascript',
+    '.css': 'css',
+    '.php': 'php',
+    '.java': 'java',
+    '.html': 'xml',
+    '.xml': 'xml',
+    '.rb': 'ruby',
+    '.sh': 'bash',
+    '.py': 'python'
+};
+
 function tip(req, res, next) {
     var name = req.params.name,
         ref = req.params.ref || 'master',
@@ -72,7 +85,7 @@ function blob(req, res) {
                 'repo': name,
                 'mime': mime.lookup(path),
                 'parents': utils.parents(name, ref, path),
-                'extension': extname(req.url),
+                'filetype': ExtensionMap[extname(path)],
                 'rawURL': req.url.replace('blob', 'raw'),
                 'data': data
             });

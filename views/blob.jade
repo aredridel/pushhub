@@ -5,5 +5,5 @@ block content
         if mime.indexOf('image') == 0
             img(src=rawURL)
         else
-            pre(data-extension=extension, class='code')
+            pre(class='code sunlight-highlight-' + filetype)
                 =data.toString()
