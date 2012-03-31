@@ -1,16 +1,14 @@
+window.addEventListener('load', function() {
+    var container = document.querySelector('.container');
 
-$(function() {
-    var $body = $(document.body);
-    var $containers = $('.container');
+    container.addEventListener('click', function(e) {
+        container.classList.toggle('open');
+        e.stopPropagation();
+    }, true);
+
+    document.body.addEventListener('click', function(e) {
+        container.classList.remove('open');
+    }, false);
 
     Sunlight.highlightAll();
-
-    $containers.click(function(e) {
-        $(this).toggleClass('open');
-        e.stopPropagation();
-    });
-
-    $body.click(function() {
-        $containers.removeClass('open');
-    });
 });

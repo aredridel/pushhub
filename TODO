@@ -1,5 +1,7 @@
-- External configuration
+- Make app fully pluggable
+- Add tabs on commits
 - Export tar.gz
-- TODOS
 - License
 - Readme
+- In code documentation
+- Tests
