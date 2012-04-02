@@ -18,6 +18,7 @@
     "bin" : {
         "pushstack": "./bin/pushstack"
     },
+    "main": "index",
     "dependencies": {
         "express": "2.5.8",
         "mime": "1.2.4",

@@ -1,4 +1,3 @@
-- Change app.js to index.js
 - Move ExtensionMap to ./lib/extensions.js
 - Add tabs on commits
 - Export tar.gz
