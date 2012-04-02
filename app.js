@@ -169,14 +169,13 @@ app.set('view options', {layout: false});
 app.set('git root', join(__dirname, ".pushstack"));
 app.set('history by page', 10);
 
+app.all(/^\/(.*)\.git/, function(req, res) {
+    req.url = req.url.replace('.git', '');
+    gitServer.handle(req, res);
+});
 app.get('/:name', tip, tree);
 app.get('/:name/tree/:ref/', tip, tree);
 app.get('/:name/tree/:ref/*', tip, tree);
 app.get('/:name/blob/:ref/*', blob);
 app.get('/:name/raw/:ref/*', raw);
 app.get('/:name/commits/:ref', history);
-
-app.all('/git/*', function(req, res) {
-    req.url = req.url.replace(/\^[\/]*/, '');
-    gitServer.handle(req, res);
-});
