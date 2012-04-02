@@ -14,12 +14,6 @@ var extname = path.extname;
 var debug = require('debug')('pushstack');
 
 
-//TODO: Make this configurable
-var GITROOT = join(__dirname, ".pushstack");
-var HISTORY_BY_PAGE = 10;
-var HISTORY_MAX_PAGE = 100000;
-
-
 var ExtensionMap = {
     '': 'plaintext',
     '.js': 'javascript',
@@ -113,23 +107,21 @@ function raw(req, res) {
     } else {
         res.render('404.jade');
     }
-
-
 }
 
 function history(req, res) {
     var name = req.params.name,
         ref = req.params.ref,
-        page = req.query['page'] | 0,
+        page = parseInt(req.query['page'], 10),
         skip = 0,
         repo = repos[name];
 
-    if(page > 0 && page < HISTORY_MAX_PAGE) {
-      skip = (page - 1) * HISTORY_BY_PAGE;
+    if(page && !isNaN(page)) {
+      skip = (page - 1) * app.set('history by page');
     }
 
     if(repo) {
-        repo.stats(ref, '.', HISTORY_BY_PAGE, skip, function(err, entry) {
+        repo.stats(ref, '.', app.set('history by page'), skip, function(err, entry) {
             if(err) { throw err; }
             res.render('history.jade', {
                 'repo': name,
@@ -141,34 +133,41 @@ function history(req, res) {
     }
 }
 
+var gitServer;
 var repos = {};
-var gitServer = pushover(GITROOT);
+var app = module.exports = express.createServer();
 
-gitServer.list(function(err, dirs) {
-    if(err) {throw err;}
-    dirs.forEach(function(dir) {
-        debug('Adding "%s" to known repositories', dir);
-        repos[dir] = new Repo(join(GITROOT, dir));
+app.on('listening', function() {
+    var gitRoot = app.set('git root');
+    gitServer = pushover(gitRoot);
+
+    gitServer.list(function(err, dirs) {
+        if(err) {throw err;}
+        dirs.forEach(function(dir) {
+            debug('Adding "%s" to known repositories', dir);
+            repos[dir] = new Repo(join(gitRoot, dir));
+        });
+    });
+
+    gitServer.on('create', function(dir) {
+        debug('Creating "%s"', dir);
+        repos[dir] = new Repo(join(gitRoot, dir));
+    });
+
+    gitServer.on('push', function(dir) {
+        debug('Pushed to "%s", flushing cache', dir);
+        repos[dir].flush();
+        repos[dir].memoize();
     });
 });
 
-gitServer.on('create', function(dir) {
-    debug('Creating "%s"', dir);
-    repos[dir] = new Repo(join(GITROOT, dir));
-});
-
-gitServer.on('push', function(dir) {
-    debug('Pushed to "%s", flushing cache', dir);
-    repos[dir].flush();
-    repos[dir].memoize();
-});
-
-var app = module.exports = express.createServer();
 app.use(express.bodyParser());
 app.use(express.favicon());
 app.use(express.static(join(__dirname, 'public')));
-app.set('view options', {layout: false});
 
+app.set('view options', {layout: false});
+app.set('git root', join(__dirname, ".pushstack"));
+app.set('history by page', 10);
 
 app.get('/:name', tip, tree);
 app.get('/:name/tree/:ref/', tip, tree);

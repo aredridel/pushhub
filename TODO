@@ -1,4 +1,6 @@
-- Make app fully pluggable
+- Change /git/repo to repo.git
+- Change app.js to index.js
+- Move ExtensionMap to ./lib/extensions.js
 - Add tabs on commits
 - Export tar.gz
 - License
