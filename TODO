@@ -1,7 +1,7 @@
-- Move ExtensionMap to ./lib/extensions.js
 - Add tabs on commits
 - Export tar.gz
 - License
 - Readme
 - In code documentation
 - Tests
+- Rename pushstack -> pushhub

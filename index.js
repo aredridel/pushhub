@@ -6,26 +6,13 @@ var express = require('express');
 var mime = require('mime');
 var pushover = require('pushover');
 
+var Extensions = require('./lib/extensions');
 var Repo = require('./lib/repo');
 var utils = require('./lib/utils');
 
 var join = path.join;
 var extname = path.extname;
 var debug = require('debug')('pushstack');
-
-
-var ExtensionMap = {
-    '': 'plaintext',
-    '.js': 'javascript',
-    '.css': 'css',
-    '.php': 'php',
-    '.java': 'java',
-    '.html': 'xml',
-    '.xml': 'xml',
-    '.rb': 'ruby',
-    '.sh': 'bash',
-    '.py': 'python'
-};
 
 function tip(req, res, next) {
     var name = req.params.name,
@@ -79,7 +66,7 @@ function blob(req, res) {
                 'repo': name,
                 'mime': mime.lookup(path),
                 'parents': utils.parents(name, ref, path),
-                'filetype': ExtensionMap[extname(path)],
+                'filetype': Extensions[extname(path)],
                 'rawURL': req.url.replace('blob', 'raw'),
                 'data': data
             });
