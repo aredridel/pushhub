@@ -1,5 +1,7 @@
 extends layout
 
 block content
+    include includes/quick-nav
+
     each commit in history
         include includes/commit

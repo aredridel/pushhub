@@ -40,6 +40,7 @@ function tree(req, res) {
         repo.tree(ref, path, function(err, items) {
             if(err || !items.length) { return res.render('404.jade'); }
             res.render('tree.jade', {
+                'view': 'tree',
                 'repo': name,
                 'ref': ref,
                 'parents': utils.parents(name, ref, path),
@@ -63,6 +64,7 @@ function blob(req, res) {
         repo.blob(ref, path, function(err, data) {
             if(err) { throw err; }
             res.render('blob.jade', {
+                'view': 'blob',
                 'repo': name,
                 'mime': mime.lookup(path),
                 'parents': utils.parents(name, ref, path),
@@ -111,8 +113,12 @@ function history(req, res) {
         repo.stats(ref, '.', app.set('history by page'), skip, function(err, entry) {
             if(err) { throw err; }
             res.render('history.jade', {
+                'view': 'history',
                 'repo': name,
-                'history': entry.commits.asArray()
+                'ref': ref,
+                'history': entry.commits.asArray(),
+                'branches': repo.cache.get('branches'),
+                'tags': repo.cache.get('tags')
             });
         });
     } else {

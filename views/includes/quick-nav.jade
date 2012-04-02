@@ -24,7 +24,11 @@
                             a(href='/' + repo +'/tree/' + tag + '/')= tag
 
     ul.tabs
-        li.selected
-            a(href='/' + repo + '/') Files
-        li
-            a(href='/' + repo + '/commits/' + ref) Commits
+        if view == 'tree'
+            li.selected: a(href='/' + repo + '/') Files
+        else
+            li: a(href='/' + repo + '/') Files
+        if view == 'history'
+            li.selected: a(href='/' + repo + '/commits/' + ref) Commits
+        else
+            li: a(href='/' + repo + '/commits/' + ref) Commits
