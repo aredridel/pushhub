@@ -1,4 +1,5 @@
-- Export tar.gz
+- Correct app mounting
+- Add commit pagination on history
 - License
 - Readme
 - In code documentation

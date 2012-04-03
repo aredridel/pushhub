@@ -5,8 +5,10 @@ html
         link(rel="stylesheet", type="text/css", href="/stylesheets/main.css")
         link(rel="stylesheet", type="text/css", href="/stylesheets/sunlight.default.css")
     body
-        include includes/breadcrumb
-        block content
+        include includes/header
+        .main
+            include includes/breadcrumb
+            block content
 
         script(src="/javascripts/sunlight-all-min.js")
         script(src="/javascripts/bootstrap.js")

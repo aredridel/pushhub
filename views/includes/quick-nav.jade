@@ -1,6 +1,6 @@
 .quick-nav.margin-bottom
     .container
-        a.toggle(style='width: 150px;')
+        a.toggle
             span.label Switch Branches/Tags
         .options
             ul.options-inner
@@ -23,7 +23,7 @@
                         li
                             a(href='/' + repo +'/tree/' + tag + '/')= tag
 
-    ul.tabs
+    nav.tabs
         if view == 'tree'
             li.selected: a(href='/' + repo + '/') Files
         else
