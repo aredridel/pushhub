@@ -158,6 +158,7 @@ app.use(express.bodyParser());
 app.use(express.favicon());
 app.use(express.static(join(__dirname, 'public')));
 
+app.set('views', join(__dirname, 'views'));
 app.set('view options', {layout: false});
 app.set('git root', join(__dirname, ".pushstack"));
 app.set('history by page', 10);
