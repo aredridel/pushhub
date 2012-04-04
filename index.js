@@ -14,6 +14,9 @@ var join = path.join;
 var extname = path.extname;
 var debug = require('debug')('pushstack');
 
+
+var app = module.exports = express.createServer();
+
 function tip(req, res, next) {
     var name = req.params.name,
         ref = req.params.ref || 'master',
@@ -142,11 +145,8 @@ function archive(req, res) {
     }
 }
 
-var gitServer;
-var repos = {};
-var app = module.exports = express.createServer();
-
-app.on('listening', function() {
+function __setup(parent) {
+    // Setting up pushover
     var gitRoot = app.set('git root');
     gitServer = pushover(gitRoot);
 
@@ -168,7 +168,17 @@ app.on('listening', function() {
         repos[dir].flush();
         repos[dir].memoize();
     });
-});
+
+    // Making basepath available to the views.
+    // This is necessary in order to serve static files properly if the app is mounted
+    app.helpers({'basepath': app.set('basepath') || ''});
+}
+
+var gitServer;
+var repos = {};
+
+app.on('listening', __setup);
+app.mounted(__setup);
 
 app.use(express.bodyParser());
 app.use(express.favicon());
