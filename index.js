@@ -146,8 +146,10 @@ function archive(req, res) {
 }
 
 function __setup(parent) {
-    // Setting up pushover
     var gitRoot = app.set('git root');
+    var basepath = app.set('basepath') || '';
+
+    // Setting up pushover
     gitServer = pushover(gitRoot);
 
     gitServer.list(function(err, dirs) {
@@ -171,7 +173,7 @@ function __setup(parent) {
 
     // Making basepath available to the views.
     // This is necessary in order to serve static files properly if the app is mounted
-    app.helpers({'basepath': app.set('basepath') || ''});
+    app.helpers({'basepath': basepath === '/' ? '' : basepath});
 }
 
 var gitServer;
