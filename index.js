@@ -17,6 +17,25 @@ var debug = require('debug')('pushstack');
 
 var app = module.exports = express.createServer();
 
+// Middleware
+
+function count(req, res, next) {
+    var name = req.params.name,
+        ref = req.params.ref || 'master',
+        repo = repos[name];
+
+    if(repo) {
+        repo.total(ref, function(err, count) {
+            if(err) { throw err; }
+            res.local('count', count);
+            next();
+        });
+    } else {
+        res.render('404.jade');
+    }
+}
+
+
 function tip(req, res, next) {
     var name = req.params.name,
         ref = req.params.ref || 'master',
@@ -24,7 +43,7 @@ function tip(req, res, next) {
 
     if(repo) {
         repo.tip(ref, function(err, tip) {
-            if(err) throw err;
+            if(err) { throw err; }
             res.local('commit', tip);
             next();
         });
@@ -32,6 +51,8 @@ function tip(req, res, next) {
         res.render('404.jade');
     }
 }
+
+// Actions
 
 function tree(req, res) {
     var name = req.params.name,
@@ -106,19 +127,30 @@ function history(req, res) {
         ref = req.params.ref,
         page = parseInt(req.query['page'], 10),
         skip = 0,
-        repo = repos[name];
+        repo = repos[name],
+        bypage = app.set('history by page');
 
-    if(page && !isNaN(page)) {
-      skip = (page - 1) * app.set('history by page');
+    if(!isNaN(page)) {
+        skip = (page - 1) * bypage;
+    } else {
+        page = 1;
     }
 
+    var count = res.local('count');
+    var next = page * bypage + bypage <= count ? page + 1 : null;
+    var previous = page * bypage - bypage > 0 ? page - 1 : null;
+
     if(repo) {
-        repo.stats(ref, '.', app.set('history by page'), skip, function(err, entry) {
+        repo.stats(ref, '.', bypage, skip, function(err, entry) {
             if(err) { throw err; }
             res.render('history.jade', {
                 'view': 'history',
                 'repo': name,
                 'ref': ref,
+                'current': page,
+                'pages': Math.floor(count / bypage),
+                'next': next,
+                'previous': previous,
                 'history': entry.commits.asArray(),
                 'branches': repo.cache.get('branches'),
                 'tags': repo.cache.get('tags')
@@ -200,5 +232,5 @@ app.get('/:name/tree/:ref/', tip, tree);
 app.get('/:name/tree/:ref/*', tip, tree);
 app.get('/:name/blob/:ref/*', blob);
 app.get('/:name/raw/:ref/*', raw);
-app.get('/:name/commits/:ref', history);
+app.get('/:name/commits/:ref', count, history);
 app.get('/:name/:format/:ref', archive);

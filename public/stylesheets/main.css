@@ -5,11 +5,15 @@ body {font-family: helvetica, sans-serif; margin: 0;  font-size: 12px }
 a { text-decoration: none; color: #4183c4; }
 a:hover { text-decoration: underline; }
 
+strong, .strong { font-weight: bolder; }
+.big { font-size: 150%; }
+.small { font-size: 75%; }
 .center { text-align:center; }
 .context { display: inline-block; width: 100%; }
 .unit { float: left; }
 .unit-right { float: right; }
 
+.margin0 { margin: 0; }
 .margin-bottom { margin-bottom: 10px; }
 
 @font-face {
@@ -57,15 +61,15 @@ nav[role="main"] a { }
 .commit .content { border-radius: 3px; border: 1px solid #ccc; margin-top: 10px; }
 .commit .message { background: #eaeeff; }
 
-.breadcrumb { color: #888; margin-top: 0; }
+.breadcrumb { color: #888; margin-top: 0; font-size: 190%; }
 .breadcrumb span { color: #444; }
 
-.quick-nav { border-bottom: 1px solid #ccc; padding-left:5px;}
+.quick-nav { border-bottom: 1px solid #ccc; padding-left:5px; display: inline-block; }
 .quick-nav .tabs { padding: 0; margin: 0; margin-bottom: -1px; }
 .quick-nav .tabs a { color: #888; }
-.quick-nav .tabs .selected a { color: #333; }
+.quick-nav .tabs .selected a { color: #333; font-weight: bold; }
 .quick-nav .tabs li:first-child { margin-left: 10px; }
-.quick-nav .tabs li { display: inline-block;  padding:9px 5px; margin-right: 5px; line-height: 18px; border-top-left-radius: 4px; border-top-right-radius: 4px; }
+.quick-nav .tabs li { display: inline-block;  padding:9px 13px; margin-right: 5px; line-height: 18px; border-top-left-radius: 4px; border-top-right-radius: 4px; }
 .quick-nav .tabs li.selected { border:1px solid #ccc; border-bottom:0; background: #fff; }
 
 .code { font-family: 'Bitstream Vera Sans Mono', Courier, monospace; line-height: 16px; }
@@ -82,7 +86,6 @@ nav[role="main"] a { }
     font-family: 'Helvetica', Arial, sans-serif;
     font-weight: bold;
     line-height: 14px;
-    margin-bottom: 18px;
     border-radius: 5px;
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;

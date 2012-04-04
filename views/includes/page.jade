@@ -1,0 +1,13 @@
+nav(role='pages', class='context big')
+    p.unit-right.margin0
+        if previous
+            a(href='?page=' + previous) &larr;
+        else
+            span &larr;
+        if next
+            a(href='?page=' + next) &rarr;
+        else
+            span &rarr;
+
+    p.unit.margin0
+        | Displaying page #{current} of #{pages} &nbsp;
