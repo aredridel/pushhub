@@ -126,6 +126,22 @@ function history(req, res) {
     }
 }
 
+function archive(req, res) {
+    var name = req.params.name,
+        ref = req.params.ref,
+        format = req.params.format === 'zipball' ? 'zip' : 'tar.gz',
+        repo = repos[name];
+
+    if(repo) {
+        repo.archive(ref, format, function(err, archive) {
+            if(err) { throw err; }
+            res.end(archive);
+        });
+    } else {
+        res.render('404.jade');
+    }
+}
+
 var gitServer;
 var repos = {};
 var app = module.exports = express.createServer();
@@ -173,3 +189,4 @@ app.get('/:name/tree/:ref/*', tip, tree);
 app.get('/:name/blob/:ref/*', blob);
 app.get('/:name/raw/:ref/*', raw);
 app.get('/:name/commits/:ref', history);
+app.get('/:name/:format/:ref', archive);
