@@ -1,6 +1,7 @@
 "use strict";
 
 var path = require('path');
+var util = require('util');
 
 var express = require('express');
 var mime = require('mime');
@@ -53,6 +54,18 @@ function tip(req, res, next) {
 }
 
 // Actions
+
+function home(req, res) {
+    for (var repo in repos) {
+        var r = repos[repo],
+            d = r.cache.get('mtime').toString().split(' ');
+        r.mtime = d.slice(1, -2).join(' ');
+        repos[repo] = r;
+    }
+    res.render('home.jade',  {
+        'repos': repos
+    });
+}
 
 function tree(req, res) {
     var name = req.params.name,
@@ -227,6 +240,7 @@ app.all(/^\/(.*)\.git/, function(req, res) {
     req.url = req.url.replace('.git', '');
     gitServer.handle(req, res);
 });
+app.get('/', home);
 app.get('/:name', tip, tree);
 app.get('/:name/tree/:ref/', tip, tree);
 app.get('/:name/tree/:ref/*', tip, tree);

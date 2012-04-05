@@ -1,9 +1,13 @@
 extends layout
 
 block content
-    include includes/quick-nav
+    include includes/header
 
-    include includes/page
+    .main
+        h2
+            p Commit history for #{repo}
+        include includes/quick-nav
+        include includes/page
 
-    each commit in history
-        include includes/commit
+        each commit in history
+            include includes/commit

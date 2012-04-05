@@ -1,0 +1,11 @@
+extends layout
+
+block content
+    .main
+        h1 Pushub
+
+        each repo in repos
+           .repo
+                h3
+                    a(href= basepath + '/' + repo.name) #{repo.name}
+                p Last updated #{repo.mtime}

@@ -1,26 +1,30 @@
 extends layout
 
 block content
-    include includes/quick-nav
+    include includes/header
 
-    if typeof commit != 'undefined'
-        include includes/commit
+    .main
+        include includes/breadcrumb
+        include includes/quick-nav
 
-    .tree-list-wrapper
-        table.tree-list
-            thead
-                tr
-                    th.name name
-                    th.age age
-                    th.message message
-            tbody
-                each item in items
+        if typeof commit != 'undefined'
+            include includes/commit
+
+        .tree-list-wrapper
+            table.tree-list
+                thead
                     tr
-                        td.name
-                            span(class="pictogram " + item.type)
-                            a(href=item.url)= item.name
-                        td.date= item.tip.date
-                        td.message= item.tip.message
-                            &nbsp;&#91;
-                            a(href="mailto:" + item.tip.author.email) #{item.tip.author.name}
-                            &nbsp;&#93;
+                        th.name name
+                        th.age age
+                        th.message message
+                tbody
+                    each item in items
+                        tr
+                            td.name
+                                span(class="pictogram " + item.type)
+                                a(href=item.url)= item.name
+                            td.date= item.tip.date
+                            td.message= item.tip.message
+                                &nbsp;&#91;
+                                a(href="mailto:" + item.tip.author.email) #{item.tip.author.name}
+                                &nbsp;&#93;

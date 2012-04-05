@@ -1,14 +1,11 @@
 !!! 5
 html
     head
-        title Listing #{repo}
+        title Pushub
         link(rel="stylesheet", type="text/css", href=basepath + "/stylesheets/main.css")
         link(rel="stylesheet", type="text/css", href=basepath + "/stylesheets/sunlight.default.css")
     body
-        include includes/header
-        .main
-            include includes/breadcrumb
-            block content
+        block content
 
         script(src=basepath + "/javascripts/sunlight-all-min.js")
         script(src=basepath + "/javascripts/bootstrap.js")
