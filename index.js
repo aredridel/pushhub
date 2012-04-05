@@ -1,11 +1,14 @@
 "use strict";
 
 var path = require('path');
-var util = require('util');
 
 var express = require('express');
 var mime = require('mime');
-var pushover = require('pushover');
+
+// As of the time of writing, pushover did not include 'create' event needed to update
+// the repo's cache, therefore I included a forked version, waiting to see if the
+// proposed patch would get merged or not
+var pushover = require('./deps/pushover');
 
 var Extensions = require('./lib/extensions');
 var Repo = require('./lib/repo');
@@ -13,7 +16,7 @@ var utils = require('./lib/utils');
 
 var join = path.join;
 var extname = path.extname;
-var debug = require('debug')('pushstack');
+var debug = require('debug')('pushhub');
 
 
 var app = module.exports = express.createServer();
@@ -233,7 +236,7 @@ app.use(express.static(join(__dirname, 'public')));
 
 app.set('views', join(__dirname, 'views'));
 app.set('view options', {layout: false});
-app.set('git root', join(__dirname, ".pushstack"));
+app.set('git root', process.cwd());
 app.set('history by page', 10);
 
 app.all(/^\/(.*)\.git/, function(req, res) {

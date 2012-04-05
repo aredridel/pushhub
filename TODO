@@ -1,6 +1,7 @@
-- Readme
 - In code documentation
 - Tests
 - Logo
-- Rename pushstack -> pushhub
-- Description
+- Description edition
+- Better 404
+- Better home
+- Move lib/repo.js to another project

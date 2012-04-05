@@ -1,10 +1,10 @@
 {
-    "name": "pushstack",
-    "description": "a front-end application for pushover",
+    "name": "pushhub",
+    "description": "A github clone build on top of expressjs and pushover",
     "version": "0.0.1",
     "repository": {
         "type": "git",
-        "url": "git://github.com/shinuza/pushstack.git"
+        "url": "git://github.com/shinuza/pushhub.git"
     },
     "keywords": [
         "versioning",
@@ -16,14 +16,13 @@
         "repository"
     ],
     "bin" : {
-        "pushstack": "./bin/pushstack"
+        "pushhub": "./bin/pushhub"
     },
     "main": "index",
     "dependencies": {
         "express": "2.5.8",
         "mime": "1.2.4",
-        "jade": "0.20.1",
-        "pushover": "0.1.2"
+        "jade": "0.20.1"
     },
     "devDependencies": {
         "debug": "0.6.0"
