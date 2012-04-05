@@ -3,6 +3,11 @@
 var app = require('../index');
 var PORT = process.argv[2] || 3000;
 var HOST = process.argv[3] || '0.0.0.0';
+var ROOT = process.argv[4];
+
+if(ROOT) {
+    app.set('git root', ROOT);
+}
 
 console.log('Listening http://%s:%d', HOST, PORT);
 app.listen(PORT, HOST);
