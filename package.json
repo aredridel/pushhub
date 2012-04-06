@@ -1,6 +1,6 @@
 {
     "name": "pushhub",
-    "description": "A github clone build on top of expressjs and pushover",
+    "description": "A github inspired interface to browse your Git repositories, built on top of expressjs and pushover",
     "version": "0.0.1",
     "repository": {
         "type": "git",

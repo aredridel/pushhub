@@ -1,7 +1,10 @@
-- In code documentation
-- Tests
 - Logo
-- Description edition
-- Better 404
+- Only list git repositories
+- Better CLI
 - Better home
+- Better 404
+- Publish to npm
 - Move lib/repo.js to another project
+- Tests
+- In code documentation
+- Description edition
