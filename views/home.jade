@@ -1,9 +1,9 @@
 extends layout
 
 block content
-    .main
-        h1 Pushhub
+    include includes/header
 
+    .main
         each repo in repos
            .repo
                 h3

@@ -27,6 +27,7 @@ strong, .strong { font-weight: bolder; }
     font-style: normal;
 }
 
+.logo { background: url(images/logo_small.png); width: 130px; height: 25px; display: block; }
 .header { padding: 5px 20px; border-bottom: 1px solid #ddd; margin-bottom: 20px; }
 
 nav[role="main"] { list-style-type: none;}

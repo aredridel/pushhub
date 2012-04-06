@@ -1,10 +1,10 @@
-- Logo
 - Only list git repositories
 - Better CLI
 - Better home
 - Better 404
+- Test examples from the docs
+- Description edition
+- Tests
 - Publish to npm
 - Move lib/repo.js to another project
-- Tests
 - In code documentation
-- Description edition

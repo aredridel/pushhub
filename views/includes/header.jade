@@ -1,8 +1,9 @@
 .header
     nav(role='main', class='context')
         li.unit
-            a(href='/'): strong Home
-        li.unit-right Download as&nbsp;
-            a(href='/' + repo + '/zipball/' + ref) zip
-            &nbsp;|&nbsp;
-            a(href='/' + repo + '/tarball/' + ref) tar.gz
+            a(href='/', class='logo')
+        if typeof repo != 'undefined'
+            li.unit-right Download as&nbsp;
+                a(href='/' + repo + '/zipball/' + ref) zip
+                &nbsp;|&nbsp;
+                a(href='/' + repo + '/tarball/' + ref) tar.gz
