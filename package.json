@@ -12,7 +12,6 @@
         "git",
         "push",
         "http",
-        "web",
         "repository"
     ],
     "bin" : {
@@ -22,6 +21,7 @@
     "dependencies": {
         "express": "2.5.8",
         "mime": "1.2.4",
+        "commander": "0.5.2",
         "jade": "0.20.1"
     },
     "devDependencies": {

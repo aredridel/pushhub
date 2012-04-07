@@ -196,7 +196,7 @@ function archive(req, res) {
     }
 }
 
-function __setup(parent) {
+function __setup() {
     var cmd;
     var gitRoot = app.set('git root');
     var basepath = app.set('basepath') || '';
@@ -205,8 +205,8 @@ function __setup(parent) {
     gitServer = pushover(gitRoot);
 
     fs.readdirSync(gitRoot).forEach(function(entry) {
-        if(utils.isDirectory(entry)) {
-            var p = join(gitRoot, entry);
+        var p = join(gitRoot, entry);
+        if(utils.isDirectory(p)) {
             cmd = spawn('git', ['status'], {cwd: p});
             cmd.on('exit', function(code) {
                 if(code === 0) {
