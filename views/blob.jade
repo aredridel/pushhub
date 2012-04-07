@@ -1,9 +1,15 @@
 extends layout
 
 block content
-    div.preview
-        if mime.indexOf('image') == 0
-            img(src=rawURL)
-        else
-            pre(class='code sunlight-highlight-' + filetype)
-                =data.toString()
+    include includes/header
+
+    .main
+        include includes/breadcrumb
+        include includes/quick-nav
+
+        div.preview
+            if mime.indexOf('image') == 0
+                img(src=rawURL)
+            else
+                pre(class='code sunlight-highlight-' + filetype)
+                    =data.toString()

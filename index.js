@@ -109,11 +109,14 @@ function blob(req, res) {
             res.render('blob.jade', {
                 'view': 'blob',
                 'repo': name,
+                'ref': ref,
                 'mime': mime.lookup(path),
                 'parents': utils.parents(name, ref, path),
                 'filetype': Extensions[extname(path)],
                 'rawURL': req.url.replace('blob', 'raw'),
-                'data': data
+                'data': data,
+                'branches': repo.cache.get('branches'),
+                'tags': repo.cache.get('tags')
             });
         });
     } else {

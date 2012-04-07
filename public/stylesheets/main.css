@@ -1,4 +1,4 @@
-body {font-family: helvetica, sans-serif; margin: 0;  font-size: 12px }
+body {font-family: helvetica, sans-serif; margin: 0 0 20px 0; font-size: 12px }
 
 .main { width:960px; margin: 0 auto; }
 
@@ -31,7 +31,6 @@ strong, .strong { font-weight: bolder; }
 .header { padding: 5px 20px; border-bottom: 1px solid #ddd; margin-bottom: 20px; }
 
 nav[role="main"] { list-style-type: none;}
-nav[role="main"] a { }
 
 .pictogram {
     font-family: 'EntypoRegular';
@@ -48,7 +47,6 @@ nav[role="main"] a { }
 .clock:after { content: "N"; font-size: 30px; color: #666; }
 
 .tree-list-wrapper, .preview { border: 3px solid #ddd; }
-
 .tree-list { border-collapse: collapse; width: 100%; color: #444; }
 .tree-list th { text-align: left; height: 20px; background: #f9f9f9; border-bottom: 1px solid #ddd; }
 .tree-list td, .tree-list th { padding: 5px; }
@@ -74,11 +72,9 @@ nav[role="main"] a { }
 .quick-nav .tabs li.selected { border:1px solid #ccc; border-bottom:0; background: #fff; }
 
 .code { font-family: 'Bitstream Vera Sans Mono', Courier, monospace; line-height: 16px; }
-
 .preview img { max-width: 100%; display: block; margin: 0 auto; }
 
 /* imported from dropkick.js and slightly modified */
-
 .container {
     background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#f5f5f5));
     background: -moz-linear-gradient(top, #fff, #f5f5f5);

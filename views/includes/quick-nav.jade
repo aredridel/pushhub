@@ -24,7 +24,7 @@
                             a(href='/' + repo +'/tree/' + tag + '/')= tag
 
     nav.tabs
-        if view == 'tree'
+        if view == 'tree' || view == 'blob'
             li.selected: a(href='/' + repo + '/') Files
         else
             li: a(href='/' + repo + '/') Files
