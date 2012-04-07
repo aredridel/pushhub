@@ -1,6 +1,8 @@
 "use strict";
 
 var path = require('path');
+var fs = require('fs');
+var cp = require('child_process');
 
 var express = require('express');
 var mime = require('mime');
@@ -16,6 +18,7 @@ var utils = require('./lib/utils');
 
 var join = path.join;
 var extname = path.extname;
+var spawn = cp.spawn;
 var debug = require('debug')('pushhub');
 
 
@@ -194,18 +197,24 @@ function archive(req, res) {
 }
 
 function __setup(parent) {
+    var cmd;
     var gitRoot = app.set('git root');
     var basepath = app.set('basepath') || '';
 
     // Setting up pushover
     gitServer = pushover(gitRoot);
 
-    gitServer.list(function(err, dirs) {
-        if(err) {throw err;}
-        dirs.forEach(function(dir) {
-            debug('Adding "%s" to known repositories', dir);
-            repos[dir] = new Repo(join(gitRoot, dir));
-        });
+    fs.readdirSync(gitRoot).forEach(function(entry) {
+        if(utils.isDirectory(entry)) {
+            var p = join(gitRoot, entry);
+            cmd = spawn('git', ['status'], {cwd: p});
+            cmd.on('exit', function(code) {
+                if(code === 0) {
+                    debug('Adding "%s" to known repositories', entry);
+                    repos[entry] = new Repo(p);
+                }
+            });
+        }
     });
 
     gitServer.on('create', function(dir) {
