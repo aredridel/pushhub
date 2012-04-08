@@ -71,7 +71,8 @@ nav[role="main"] { list-style-type: none;}
 .quick-nav .tabs li { display: inline-block;  padding:9px 13px; margin-right: 5px; line-height: 18px; border-top-left-radius: 4px; border-top-right-radius: 4px; }
 .quick-nav .tabs li.selected { border:1px solid #ccc; border-bottom:0; background: #fff; }
 
-.repo { border-radius: 3px; border: 1px solid #ddd; float: left; width: 30%; padding: 0 5px; margin: 5px; }
+.repo { border-radius: 3px; border: 1px solid #ddd; float: left; width: 30%;  height: 150px; padding: 0 5px; margin: 5px; }
+.repo .description { width: 100%; }
 
 .code { font-family: 'Bitstream Vera Sans Mono', Courier, monospace; line-height: 16px; }
 .preview img { max-width: 100%; display: block; margin: 0 auto; }

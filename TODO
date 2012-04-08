@@ -1,7 +1,7 @@
+- Repo vs name
+- Unit tests
 - Better 404
-- Test examples from the docs
-- Description edition
-- Tests
+- Improve description edition
 - Publish to npm
-- Move lib/repo.js to another project
+- Move lib/{repo,commit,cache}.js to another project
 - In code documentation

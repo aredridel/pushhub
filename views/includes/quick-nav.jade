@@ -13,7 +13,8 @@
                     else:
                         li
                             a(href='/' + repo +'/tree/' + branch + '/')= branch
-                li.option-title --- Tags ---
+                if tags.length
+                    li.option-title --- Tags ---
                 each tag in tags
                     if ref == tag
                         li.current

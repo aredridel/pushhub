@@ -85,6 +85,7 @@ function tree(req, res) {
             res.render('tree.jade', {
                 'view': 'tree',
                 'repo': name,
+                'description': repo.description(),
                 'ref': ref,
                 'parents': utils.parents(name, ref, path),
                 'items': items,
@@ -109,6 +110,7 @@ function blob(req, res) {
             res.render('blob.jade', {
                 'view': 'blob',
                 'repo': name,
+                'description': repo.description(),
                 'ref': ref,
                 'mime': mime.lookup(path),
                 'parents': utils.parents(name, ref, path),
@@ -169,6 +171,7 @@ function history(req, res) {
                 'view': 'history',
                 'repo': name,
                 'ref': ref,
+                'description': repo.description(),
                 'current': page,
                 'pages': Math.floor(count / bypage),
                 'next': next,
@@ -196,6 +199,23 @@ function archive(req, res) {
         });
     } else {
         res.render('404.jade');
+    }
+}
+
+function description(req, res) {
+    var name = req.params.name,
+        repo = repos[name],
+        method = req.method,
+        description = req.body.description;
+
+    if(method == 'POST') {
+        if(!description) {
+            return res.send(400);
+        }
+        repo.description(description);
+        return res.json({ok: true});
+    } else {
+        res.json({'description': repo.description()});
     }
 }
 
@@ -263,3 +283,5 @@ app.get('/:name/blob/:ref/*', blob);
 app.get('/:name/raw/:ref/*', raw);
 app.get('/:name/commits/:ref', count, history);
 app.get('/:name/:format/:ref', archive);
+app.get('/:name/description', description);
+app.post('/:name/description', description);

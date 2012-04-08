@@ -8,4 +8,5 @@ block content
            .repo
                 h3
                     a(href= basepath + '/' + repo.name) #{repo.name}
+                p.description(data-repo=repo.name)= repo.description()
                 p Last updated: #{repo.mtime}

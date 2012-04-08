@@ -4,9 +4,10 @@ block content
     include includes/header
 
     .main
-        h2
-            p Commit history for #{repo}
+        include includes/description
+        include includes/breadcrumb
         include includes/quick-nav
+
         include includes/page
 
         each commit in history
