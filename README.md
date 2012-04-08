@@ -33,7 +33,7 @@ To get the `pushhub` command, make sure to install with the `-g` flag:
 
 And then
 
-    pushhub --port=3000 --host=localhost --dir=~/repos
+    pushhub --port 3000 --host localhost --directory ~/repos
 
 point your browser to [http://localhost:3000/](http://localhost:3000/) to see your repositories.
 
@@ -41,7 +41,11 @@ point your browser to [http://localhost:3000/](http://localhost:3000/) to see yo
 
 ### B) JS API:
 
-In `app.js`
+First run
+
+    npm install pushhub
+
+Then in `app.js`
 
 ```js
 var pushhub = require('pushhub');
@@ -134,6 +138,7 @@ of it. Basic Auth works well with both `http` and `git` interfaces.
 
 ## Roadmap
 
-- Study the possibility of HTTPS
+- Readme
+- HTTPS
 - Diffs
 - Look'n'feel
