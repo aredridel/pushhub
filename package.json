@@ -22,10 +22,11 @@
         "express": "2.5.8",
         "mime": "1.2.4",
         "commander": "0.5.2",
-        "jade": "0.20.1"
+        "jade": "0.22.1"
     },
     "devDependencies": {
-        "debug": "0.6.0"
+        "debug": "0.6.0",
+        "mocha": "1.0.1"
     },
     "engines": {
         "node": ">=0.4.0"
