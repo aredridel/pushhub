@@ -15,7 +15,8 @@ or
 ## Features
 
 - Github like presentation of your repositories
-- Simple and quick set-up.
+- Simple and quick set-up
+- Automatic remote folder creation
 - Command-line setup
 - Javascript API
 - Git http interface
@@ -103,7 +104,7 @@ The `pushhub` command accepts the following options:
 - `-d`/`--directory`
 
   - the directory containing your git repositories.
-  - Defaults to `cwd`.
+  - Defaults to `cwd`. **The node process needs read/write access to this directory**
 
 ### B) JS API
 
@@ -114,27 +115,26 @@ Here is a list of the relevant options:
 - `git root`
 
   - the directory containing your git repositories.
-  - Defaults to `process.cwd()`
+  - Defaults to `process.cwd()`.
 
 - `history by page`
 
   - the number of commits to display on a commit history page
-  - Defaults to `10`
+  - Defaults to `10`.
 
 -  `views`
 
   - The directory where express will look for the views, can be used to custom the templates (no recommended).
-  - Defaults to `/path/to/node_modules/pushhub`
+  - Defaults to `/path/to/node_modules/pushhub`. **The node process needs read/write access to this directory**
 
 ## Authentication
 
-PushHub doesn't come with built-in authentication, it won't, ever. It's otherwise very easy to set-up authentication in front
+PushHub doesn't come with built-in authentication. It's otherwise very easy to set-up authentication in front
 of it. Basic Auth works well with both `http` and `git` interfaces.
 
 ## Known Issues
 
-- Node.js sometimes drops the stdout of spawned processes, which may trigger a rendering error.
-- Pushover doesn't emit a `create` event, I've proposed a patch but in the meantime, I use pushover as a dependency
+- Pushover doesn't emit a `create` event, I've proposed a patch but in the meantime I use pushover as a dependency
 
 ## Roadmap
 
