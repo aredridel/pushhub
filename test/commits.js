@@ -20,28 +20,47 @@ var text = "commit b5bfdc9c45ea5a825ac7498268b723d59c110fbd\n" +
         "\n" +
         "    Refactoring\n" +
         "\n";
+
 var c = new Commits(text);
 
-describe('Commit parsing:', function() {
-    it('should store commits properly', function() {
-        assert.equal(c.len(), 3);
+describe(__filename, function() {
+    describe('commit parsing:', function() {
+
+        it('should return the hash', function() {
+            assert.equal(c.get(0).hash, 'b5bfdc9c45ea5a825ac7498268b723d59c110fbd');
+        });
+
+        it('should return the author', function() {
+            var author = c.get(2).author;
+            assert.equal(author.name, 'Samori Gorse');
+            assert.equal(author.email, 'samorigorse@gmail.com');
+        });
+
+        it('should return the date', function() {
+            assert.equal(c.get(1).date, '3 hours ago');
+        });
+
+        it('should return the message', function() {
+            assert.ok(c.get(2).message.indexOf('Refactoring') != -1);
+        });
     });
 
-    it('should return the hash', function() {
-        assert.equal(c.get(0).hash, 'b5bfdc9c45ea5a825ac7498268b723d59c110fbd');
-    });
+    describe('methods:', function() {
+        it('should get the commit by index', function() {
+            assert.equal(c.get(3), undefined);
+            assert.notEqual(c.get(1), undefined);
+        });
 
-    it('should return the author', function() {
-        var author = c.get(2).author;
-        assert.equal(author.name, 'Samori Gorse');
-        assert.equal(author.email, 'samorigorse@gmail.com');
-    });
+        it('should return the number of parsed commit entries', function() {
+            assert.equal(c.len(), 3);
+        });
 
-    it('should return the date', function() {
-        assert.equal(c.get(1).date, '3 hours ago');
-    });
+        it('should return the last element', function() {
+            assert.equal(c.last(), c.store[c.store.length - 1]);
+        });
 
-    it('should return the message', function() {
-        assert.ok(c.get(2).message.indexOf('Refactoring') != -1);
+        it('should return the first element', function() {
+            assert.equal(c.tip(), c.store[0]);
+        });
     });
 });
