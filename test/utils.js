@@ -11,6 +11,7 @@ describe(__filename, function() {
 
     it('should check if an entry is a directory or not', function() {
         assert.equal(Utils.isDirectory(__dirname), true);
+        assert.equal(Utils.isDirectory('/seriously-if-this-directory-exists-I-quit'), false);
     });
 
     it('should create a clean url with the given arguments', function() {
