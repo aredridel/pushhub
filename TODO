@@ -1,6 +1,5 @@
-- Repo vs name
-- Unit tests
 - Better 404
+- Repo vs name
 - Improve description edition
 - Publish to npm
 - Move lib/{repo,commit,cache}.js to another project

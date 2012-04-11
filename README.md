@@ -21,6 +21,11 @@ or
 - Javascript API
 - Git http interface
 
+## Requirements
+
+- Git 1.7.x
+- Node.js
+
 ## Usage
 
 Pushhub is a pluggable [Express](http://expressjs.com) app, therefore the set-up is very flexible
