@@ -34,5 +34,5 @@ describe(__filename, function() {
         assert.equal(p[0].url, '/node/tree/master/');
         assert.equal(p[1].url, '/node/tree/master/deps');
         assert.equal(p[2].url, '/node/tree/master/deps/v8');
-    })
+    });
 });
