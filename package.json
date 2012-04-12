@@ -6,6 +6,19 @@
         "type": "git",
         "url": "git://github.com/shinuza/pushhub.git"
     },
+    "maintainers": [
+        {
+            "name": "Samori Gorse",
+            "email": "samorigorse@gmail.com",
+            "web": "http://github.com/shinuza"
+        }
+    ],
+    "licenses": [
+        {
+            "type": "MIT",
+            "url": "http://www.opensource.org/licenses/MIT"
+        }
+    ],
     "keywords": [
         "versioning",
         "dvcs",
@@ -16,6 +29,9 @@
     ],
     "bin" : {
         "pushhub": "./bin/pushhub"
+    },
+    "scripts": {
+       "test": "mocha -R spec"
     },
     "main": "index",
     "dependencies": {
