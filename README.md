@@ -141,9 +141,15 @@ of it. Basic Auth works well with both `http` and `git` interfaces.
 
 - Pushover doesn't emit a `create` event, I've proposed a patch but in the meantime I use pushover as a dependency
 
+# Running the tests
+
+    cd /path/to/pushhub
+    git clone http://github.com/shinuza/pushhub-test test/sandbox/pushhub-test
+    npm test
+
 ## Roadmap
 
-- Readme
+- Readme handling
 - HTTPS
 - Diffs
 - Look'n'feel
