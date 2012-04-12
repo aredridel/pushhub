@@ -52,7 +52,7 @@ describe(__filename, function() {
         });
 
         it('should return the number of parsed commit entries', function() {
-            assert.equal(c.len(), 3);
+            assert.equal(c.size(), 3);
         });
 
         it('should return the last element', function() {
