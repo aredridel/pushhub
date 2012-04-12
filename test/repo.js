@@ -1,7 +1,7 @@
 var assert = require('assert');
 
 var Repo = require('../lib/repo');
-var repo = 'fail';
+var repo = 'pushhub-test';
 
 var r = new Repo(__dirname + '/sandbox/' + repo);
 
