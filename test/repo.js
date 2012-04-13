@@ -30,7 +30,7 @@ describe(__filename, function() {
     });
 
     it('should stat 2 commits', function(done) {
-       r.stats('master', '.', 2, function(err, entry) {
+       r.stats('master', '.', { maxcount: 2 }, function(err, entry) {
            assert.ifError(err);
            assert.equal(entry.commits.size(), 2);
            done();
@@ -38,7 +38,7 @@ describe(__filename, function() {
     });
 
     it('should stat 5 commits and skip 2', function(done) {
-       r.stats('master', '.', 5, 2, function(err, entry) {
+       r.stats('master', '.', { maxcount: 5, skip: 2 }, function(err, entry) {
            //TODO: Fix this test
            assert.ifError(err);
            assert.equal(entry.commits.size(), 5);

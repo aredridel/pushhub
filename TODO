@@ -1,4 +1,4 @@
-- Publish to npm
+- Remove Repo#memoize, Repo#flush
 - Better 404
 - Repo vs name
 - Improve description edition
