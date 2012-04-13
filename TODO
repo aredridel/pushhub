@@ -1,4 +1,4 @@
-- Remove Repo#memoize, Repo#flush
+- Make tip and count cacheable
 - Better 404
 - Repo vs name
 - Improve description edition

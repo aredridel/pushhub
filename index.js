@@ -24,6 +24,14 @@ var debug = require('debug')('pushhub');
 
 var app = module.exports = express.createServer();
 
+// Helpers
+
+function cache(repo) {
+    repo.branches(utils.noop);
+    repo.tags(utils.noop);
+    repo.mtime(utils.noop);
+}
+
 // Middleware
 
 function count(req, res, next) {
@@ -227,14 +235,15 @@ function __setup() {
     // Setting up pushover
     gitServer = pushover(gitRoot);
 
-    fs.readdirSync(gitRoot).forEach(function(entry) {
-        var p = join(gitRoot, entry);
+    fs.readdirSync(gitRoot).forEach(function(dir) {
+        var p = join(gitRoot, dir);
         if(utils.isDirectory(p)) {
             cmd = spawn('git', ['status'], {cwd: p});
             cmd.on('exit', function(code) {
                 if(code === 0) {
-                    debug('Adding "%s" to known repositories', entry);
-                    repos[entry] = new Repo(p);
+                    debug('Adding "%s" to known repositories', dir);
+                    repos[dir] = new Repo(p);
+                    cache(repos[dir]);
                 }
             });
         }
@@ -243,12 +252,12 @@ function __setup() {
     gitServer.on('create', function(dir) {
         debug('Creating "%s"', dir);
         repos[dir] = new Repo(join(gitRoot, dir));
+        cache(repos[dir]);
     });
 
     gitServer.on('push', function(dir) {
         debug('Pushed to "%s", flushing cache', dir);
-        repos[dir].flush();
-        repos[dir].memoize();
+        cache(repos[dir]);
     });
 
     // Making basepath available to the views.
