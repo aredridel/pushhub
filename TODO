@@ -1,4 +1,5 @@
 - Better 404
+- Better home
 - Repo vs name
 - Improve description edition
 - Move lib/{repo,commit,cache}.js to another project

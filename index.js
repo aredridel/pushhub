@@ -27,44 +27,19 @@ var app = module.exports = express.createServer();
 // Helpers
 
 function cache(repo) {
-    repo.branches(utils.noop);
-    repo.tags(utils.noop);
     repo.mtime(utils.noop);
-}
-
-// Middleware
-
-function count(req, res, next) {
-    var name = req.params.name,
-        ref = req.params.ref || 'master',
-        repo = repos[name];
-
-    if(repo) {
-        repo.total(ref, function(err, count) {
-            if(err) { throw err; }
-            res.local('count', count);
-            next();
+    repo.branches(function(err, branches) {
+        branches.forEach(function(branch) {
+            repo.total(branch, utils.noop);
+            repo.tip(branch, utils.noop);
         });
-    } else {
-        res.render('404.jade');
-    }
-}
-
-
-function tip(req, res, next) {
-    var name = req.params.name,
-        ref = req.params.ref || 'master',
-        repo = repos[name];
-
-    if(repo) {
-        repo.tip(ref, function(err, tip) {
-            if(err) { throw err; }
-            res.local('commit', tip);
-            next();
+    });
+    repo.tags(function(err, tags) {
+        tags.forEach(function(tag) {
+            repo.total(tag, utils.noop);
+            repo.tip(tag, utils.noop);
         });
-    } else {
-        res.render('404.jade');
-    }
+    });
 }
 
 // Actions
@@ -76,9 +51,7 @@ function home(req, res) {
         r.mtime = d.slice(1, -2).join(' ');
         repos[repo] = r;
     }
-    res.render('home.jade',  {
-        'repos': repos
-    });
+    res.render('home.jade',  { 'repos': repos });
 }
 
 function tree(req, res) {
@@ -95,6 +68,7 @@ function tree(req, res) {
                 'repo': name,
                 'description': repo.description(),
                 'ref': ref,
+                'commit': repo.cache.get('tip:' + ref),
                 'parents': utils.parents(name, ref, path),
                 'items': items,
                 'branches': repo.cache.get('branches'),
@@ -168,7 +142,7 @@ function history(req, res) {
         page = 1;
     }
 
-    var count = res.local('count');
+    var count = repo.cache.get('total:' + ref);
     var next = page * bypage + bypage <= count ? page + 1 : null;
     var previous = page * bypage - bypage > 0 ? page - 1 : null;
 
@@ -285,12 +259,12 @@ app.all(/^\/(.*)\.git/, function(req, res) {
     gitServer.handle(req, res);
 });
 app.get('/', home);
-app.get('/:name', tip, tree);
-app.get('/:name/tree/:ref/', tip, tree);
-app.get('/:name/tree/:ref/*', tip, tree);
+app.get('/:name', tree);
+app.get('/:name/tree/:ref/', tree);
+app.get('/:name/tree/:ref/*', tree);
 app.get('/:name/blob/:ref/*', blob);
 app.get('/:name/raw/:ref/*', raw);
-app.get('/:name/commits/:ref', count, history);
+app.get('/:name/commits/:ref', history);
 app.get('/:name/:format/:ref', archive);
 app.get('/:name/description', description);
 app.post('/:name/description', description);
