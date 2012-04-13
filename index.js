@@ -173,7 +173,7 @@ function history(req, res) {
     var previous = page * bypage - bypage > 0 ? page - 1 : null;
 
     if(repo) {
-        repo.stats(ref, '.', bypage, skip, function(err, entry) {
+        repo.stats(ref, '.', { maxcount: bypage, skip: skip}, function(err, entry) {
             if(err) { throw err; }
             res.render('history.jade', {
                 'view': 'history',
