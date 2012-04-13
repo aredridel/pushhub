@@ -1,6 +1,6 @@
 $(function() {
     var $body = $(document.body);
-    var $containers = $body.find('.containers');
+    var $containers = $body.find('.container');
 
     $containers.click(function(e) {
         $(this).toggleClass('open');
