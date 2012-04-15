@@ -18,7 +18,6 @@ var utils = require('./lib/utils');
 
 var join = path.join;
 var extname = path.extname;
-var spawn = cp.spawn;
 var debug = require('debug')('pushhub');
 
 
@@ -212,14 +211,8 @@ function __setup() {
     fs.readdirSync(gitRoot).forEach(function(dir) {
         var p = join(gitRoot, dir);
         if(utils.isDirectory(p)) {
-            cmd = spawn('git', ['status'], {cwd: p});
-            cmd.on('exit', function(code) {
-                if(code === 0) {
-                    debug('Adding "%s" to known repositories', dir);
-                    repos[dir] = new Repo(p);
-                    cache(repos[dir]);
-                }
-            });
+            repos[dir] = new Repo(p);
+            cache(repos[dir]);
         }
     });
 
