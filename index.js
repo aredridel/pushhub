@@ -2,7 +2,6 @@
 
 var path = require('path');
 var fs = require('fs');
-var cp = require('child_process');
 
 var express = require('express');
 var mime = require('mime');
@@ -201,9 +200,7 @@ function description(req, res) {
 }
 
 function __setup() {
-    var cmd;
     var gitRoot = app.set('git root');
-    var basepath = app.set('basepath') || '';
 
     // Setting up pushover
     gitServer = pushover(gitRoot);
@@ -226,10 +223,6 @@ function __setup() {
         debug('Pushed to "%s", flushing cache', dir);
         cache(repos[dir]);
     });
-
-    // Making basepath available to the views.
-    // This is necessary in order to serve static files properly if the app is mounted
-    app.helpers({'basepath': basepath === '/' ? '' : basepath});
 }
 
 var gitServer;

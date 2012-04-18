@@ -7,6 +7,6 @@ block content
         each repo in repos
            .repo
                 h3
-                    a(href= basepath + '/' + repo.name) #{repo.name}
+                    a(href= app.route + repo.name) #{repo.name}
                 p.description(data-repo=repo.name)= repo.description()
                 p Last updated: #{repo.mtime}
