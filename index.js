@@ -5,11 +5,7 @@ var fs = require('fs');
 
 var express = require('express');
 var mime = require('mime');
-
-// As of the time of writing, pushover did not include 'create' event needed to update
-// the repo's cache, therefore I included a forked version, waiting to see if the
-// proposed patch would get merged or not
-var pushover = require('./deps/pushover');
+var pushover = require('pushover');
 
 var Extensions = require('./lib/extensions');
 var Repo = require('./lib/repo');
