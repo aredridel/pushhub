@@ -214,7 +214,7 @@ function __setup() {
 
     fs.readdirSync(gitRoot).forEach(function(dir) {
         var p = join(gitRoot, dir);
-        if(utils.isDirectory(p)) {
+        if(utils.isGitDir(p)) {
             repos[dir] = new Repo(p);
             cache(repos[dir]);
         }
