@@ -254,7 +254,7 @@ app.set('view options', {layout: false});
 app.set('git root', process.cwd());
 app.set('history by page', 10);
 
-app.all(/^\/(.*)\.git/, function(req, res) {
+app.all(/^\/(.*)\.git$/, function(req, res) {
     req.url = req.url.replace('.git', '');
     gitServer.handle(req, res);
 });
