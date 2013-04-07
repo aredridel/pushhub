@@ -243,7 +243,7 @@ var gitServer;
 var repos = {};
 
 app.on('listening', __setup);
-app.mounted(__setup);
+app.on('mount', __setup);
 
 app.use(express.bodyParser());
 app.use(express.favicon());
