@@ -203,6 +203,11 @@ function description(req, res) {
 
 function __setup() {
     var gitRoot = app.set('git root');
+    app.locals.app = app;
+
+    if(!arguments.length) {
+      app.route = '/';
+    }
 
     // Setting up pushover
     gitServer = pushover(gitRoot);
