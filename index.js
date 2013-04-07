@@ -16,7 +16,7 @@ var extname = path.extname;
 var debug = require('debug')('pushhub');
 
 
-var app = module.exports = express.createServer();
+var app = module.exports = express();
 
 // Helpers
 
