@@ -134,7 +134,7 @@ function history(req, res) {
         page = parseInt(req.query['page'], 10),
         skip = 0,
         repo = repos[name],
-        bypage = app.set('history by page');
+        bypage = app.get('history by page');
 
     if(!isNaN(page)) {
         skip = (page - 1) * bypage;
@@ -202,7 +202,7 @@ function description(req, res) {
 }
 
 function __setup() {
-    var gitRoot = app.set('git root');
+    var gitRoot = app.get('git root');
     app.locals.app = app;
 
     if(!arguments.length) {
