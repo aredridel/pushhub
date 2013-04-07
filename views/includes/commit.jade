@@ -3,8 +3,7 @@
         span(class='pictogram clock')
         span.label Latest commit to <strong>#{ref}</strong>
     .content
-        p.message
-            #{commit.message}
+        p.message #{commit.message}
         p.authored
             strong #{commit.author.name}
             span &nbsp; authored #{commit.date}
