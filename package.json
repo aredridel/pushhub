@@ -28,7 +28,7 @@
         "repository"
     ],
     "bin" : {
-        "pushhub": "./bin/pushhub"
+        "pushhub": "./bin/pushhub.js"
     },
     "scripts": {
        "test": "mocha -R spec"
