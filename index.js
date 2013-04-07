@@ -5,11 +5,7 @@ var fs = require('fs');
 
 var express = require('express');
 var mime = require('mime');
-
-// As of the time of writing, pushover did not include 'create' event needed to update
-// the repo's cache, therefore I included a forked version, waiting to see if the
-// proposed patch would get merged or not
-var pushover = require('./deps/pushover');
+var pushover = require('pushover');
 
 var Extensions = require('./lib/extensions');
 var Repo = require('./lib/repo');
@@ -20,23 +16,29 @@ var extname = path.extname;
 var debug = require('debug')('pushhub');
 
 
-var app = module.exports = express.createServer();
+var app = module.exports = express();
 
 // Helpers
 
 function cache(repo) {
     repo.mtime(utils.noop);
+
     repo.branches(function(err, branches) {
+      if(branches) {
         branches.forEach(function(branch) {
-            repo.total(branch, utils.noop);
-            repo.tip(branch, utils.noop);
+          repo.total(branch, utils.noop);
+          repo.tip(branch, utils.noop);
         });
+      }
     });
+
     repo.tags(function(err, tags) {
+      if(tags) {
         tags.forEach(function(tag) {
-            repo.total(tag, utils.noop);
-            repo.tip(tag, utils.noop);
+          repo.total(tag, utils.noop);
+          repo.tip(tag, utils.noop);
         });
+      }
     });
 }
 
@@ -132,7 +134,7 @@ function history(req, res) {
         page = parseInt(req.query['page'], 10),
         skip = 0,
         repo = repos[name],
-        bypage = app.set('history by page');
+        bypage = app.get('history by page');
 
     if(!isNaN(page)) {
         skip = (page - 1) * bypage;
@@ -200,14 +202,19 @@ function description(req, res) {
 }
 
 function __setup() {
-    var gitRoot = app.set('git root');
+    var gitRoot = app.get('git root');
+    app.locals.app = app;
+
+    if(!arguments.length) {
+      app.route = '/';
+    }
 
     // Setting up pushover
     gitServer = pushover(gitRoot);
 
     fs.readdirSync(gitRoot).forEach(function(dir) {
         var p = join(gitRoot, dir);
-        if(utils.isDirectory(p)) {
+        if(utils.isGitDir(p)) {
             repos[dir] = new Repo(p);
             cache(repos[dir]);
         }
@@ -225,11 +232,18 @@ function __setup() {
     });
 }
 
+app._listen = app.listen;
+
+app.listen = function listen() {
+  app.emit('listening');
+  app._listen.apply(app, arguments);
+};
+
 var gitServer;
 var repos = {};
 
 app.on('listening', __setup);
-app.mounted(__setup);
+app.on('mount', __setup);
 
 app.use(express.bodyParser());
 app.use(express.favicon());

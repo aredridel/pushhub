@@ -28,21 +28,22 @@
         "repository"
     ],
     "bin" : {
-        "pushhub": "./bin/pushhub"
+        "pushhub": "./bin/pushhub.js"
     },
     "scripts": {
        "test": "mocha -R spec"
     },
     "main": "index",
     "dependencies": {
-        "express": "2.5.8",
-        "mime": "1.2.4",
-        "commander": "0.5.2",
-        "jade": "0.22.1",
-        "debug": "0.6.0"
+        "express": "*",
+        "mime": "*",
+        "commander": "*",
+        "jade": "*",
+        "debug": "*",
+        "pushover": "*"
     },
     "devDependencies": {
-        "mocha": "1.0.1"
+        "mocha": "*"
     },
     "engines": {
         "node": ">=0.4.0"

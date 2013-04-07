@@ -1,11 +1,11 @@
 h2.breadcrumb
     a(href='/' + repo + '/') #{repo}
-    &nbsp;/
+    &nbsp;/&nbsp;
     if typeof parents != 'undefined'
         each parent in parents
             if !parent.isLast
                  a(href=parent.url) #{parent.label}
-                 &nbsp;/
+                 &nbsp;/&nbsp;
             else
                 if parent.label != '.'
                     span= parent.label
