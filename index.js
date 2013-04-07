@@ -232,6 +232,13 @@ function __setup() {
     });
 }
 
+app._listen = app.listen;
+
+app.listen = function listen() {
+  app.emit('listening');
+  app._listen.apply(app, arguments);
+};
+
 var gitServer;
 var repos = {};
 
