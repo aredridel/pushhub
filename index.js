@@ -5,7 +5,6 @@ var fs = require('fs');
 
 var express = require('express');
 var mime = require('mime');
-var pushover = require('pushover');
 
 var Extensions = require('./lib/extensions');
 var Repo = require('./lib/repo');
@@ -210,25 +209,19 @@ function __setup() {
     }
 
     // Setting up pushover
-    gitServer = pushover(gitRoot);
-
-    fs.readdirSync(gitRoot).forEach(function(dir) {
-        var p = join(gitRoot, dir);
-        if(utils.isGitDir(p)) {
-            repos[dir] = new Repo(p);
-            cache(repos[dir]);
+    gitServer = utils.pushover(gitRoot, {
+      'create': function(dir) {
+        if(!repos[dir]) {
+          debug('Creating "%s"', dir);
+          repos[dir] = new Repo(join(gitRoot, dir));
+          cache(repos[dir]);
         }
-    });
+      },
 
-    gitServer.on('create', function(dir) {
-        debug('Creating "%s"', dir);
-        repos[dir] = new Repo(join(gitRoot, dir));
-        cache(repos[dir]);
-    });
-
-    gitServer.on('push', function(dir) {
+      'push': function(dir) {
         debug('Pushed to "%s", flushing cache', dir);
         cache(repos[dir]);
+      }
     });
 }
 
