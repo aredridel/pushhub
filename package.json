@@ -37,10 +37,10 @@
     "dependencies": {
         "express": "*",
         "mime": "*",
-        "commander": "*",
+        "commander": "0.5.x",
         "jade": "*",
         "debug": "*",
-        "pushover": "*"
+        "pushover": "git://github.com/shinuza/pushover.git#master"
     },
     "devDependencies": {
         "mocha": "*"
