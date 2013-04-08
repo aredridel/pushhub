@@ -75,7 +75,7 @@ In `app.js`
 ```js
 var express = require('express');
 var pushhub = require('pushhub');
-var app = express.createServer();
+var app = express();
 
 // ...
 
