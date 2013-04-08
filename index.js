@@ -14,7 +14,8 @@ var join = path.join;
 var extname = path.extname;
 var debug = require('debug')('pushhub');
 
-
+var gitServer;
+var repos = {};
 var app = module.exports = express();
 
 // Helpers
@@ -44,13 +45,17 @@ function cache(repo) {
 // Actions
 
 function home(req, res) {
-    for (var repo in repos) {
-        var r = repos[repo],
-            d = r.cache.get('mtime').toString().split(' ');
-        r.mtime = d.slice(1, -2).join(' ');
-        repos[repo] = r;
-    }
-    res.render('home.jade',  { 'repos': repos });
+  var repo, date;
+
+  for (var entry in repos) {
+    repo = repos[entry];
+    date = repo.cache.get('mtime').toString().split(' ');
+
+    repo.mtime = date.slice(1, -2).join(' ');
+
+    repos[entry] = repo;
+  }
+  res.render('home.jade',  { repos: repos });
 }
 
 function tree(req, res) {
@@ -231,9 +236,6 @@ app.listen = function listen() {
   app.emit('listening');
   app._listen.apply(app, arguments);
 };
-
-var gitServer;
-var repos = {};
 
 app.on('listening', __setup);
 app.on('mount', __setup);
