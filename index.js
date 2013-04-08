@@ -5,10 +5,12 @@ var fs = require('fs');
 
 var express = require('express');
 var mime = require('mime');
+var pushover = require('pushover');
 
 var Extensions = require('./lib/extensions');
 var Repo = require('./lib/repo');
 var utils = require('./lib/utils');
+var middleware = require('./lib/middleware.js');
 
 var join = path.join;
 var extname = path.extname;
@@ -205,30 +207,67 @@ function description(req, res) {
     }
 }
 
-function __setup() {
-    var gitRoot = app.get('git root');
-    app.locals.app = app;
+function setup() {
+  app.locals.app = app;
 
-    if(!arguments.length) {
-      app.route = '/';
+  if(!arguments.length) {
+    app.route = '/';
+  }
+
+  // Setting up pushover
+  var gitRoot = app.get('git root');
+  gitServer = pushover(gitRoot);
+
+  function register(dir) {
+    var p = join(gitRoot, dir);
+    repos[dir] = new Repo(p);
+    cache(repos[dir]);
+  }
+
+  gitServer.on('create', function(dir) {
+    if(!repos[dir]) {
+      debug('Creating "%s"', dir);
+      register(dir);
     }
+  });
 
-    // Setting up pushover
-    gitServer = utils.pushover(gitRoot, {
-      'create': function(dir) {
-        if(!repos[dir]) {
-          debug('Creating "%s"', dir);
-          repos[dir] = new Repo(join(gitRoot, dir));
-          cache(repos[dir]);
-        }
-      },
+  gitServer.on('push', function(push) {
+    debug('Pushed to "%s", flushing cache', push.repo);
+    push.accept();
+  });
 
-      'push': function(dir) {
-        debug('Pushed to "%s", flushing cache', dir);
-        cache(repos[dir]);
+  fs.watch(gitRoot, function() {
+    fs.readdirSync(gitRoot).forEach(function(dir) {
+      if(!repos[dir]) {
+        debug('Registering "%s"', dir);
+        register(dir);
       }
     });
+  });
+
+  app.use(express.bodyParser());
+  app.use(express.favicon());
+  app.use(express.static(join(__dirname, 'public')));
+  app.use(express.logger('dev'));
+  app.use(middleware(gitServer));
+
+
+  app.get('/', home);
+  app.get('/:name', tree);
+  app.get('/:name/tree/:ref/', tree);
+  app.get('/:name/tree/:ref/*', tree);
+  app.get('/:name/blob/:ref/*', blob);
+  app.get('/:name/raw/:ref/*', raw);
+  app.get('/:name/commits/:ref', history);
+  app.get('/:name/:format/:ref', archive);
+  app.get('/:name/description', description);
+  app.post('/:name/description', description);
 }
+
+app.set('views', join(__dirname, 'views'));
+app.set('view options', {layout: false});
+app.set('git root', process.cwd());
+app.set('history by page', 10);
 
 app._listen = app.listen;
 
@@ -237,29 +276,5 @@ app.listen = function listen() {
   app._listen.apply(app, arguments);
 };
 
-app.on('listening', __setup);
-app.on('mount', __setup);
-
-app.use(express.bodyParser());
-app.use(express.favicon());
-app.use(express.static(join(__dirname, 'public')));
-
-app.set('views', join(__dirname, 'views'));
-app.set('view options', {layout: false});
-app.set('git root', process.cwd());
-app.set('history by page', 10);
-
-app.all(/^\/(.*)\.git$/, function(req, res) {
-    req.url = req.url.replace('.git', '');
-    gitServer.handle(req, res);
-});
-app.get('/', home);
-app.get('/:name', tree);
-app.get('/:name/tree/:ref/', tree);
-app.get('/:name/tree/:ref/*', tree);
-app.get('/:name/blob/:ref/*', blob);
-app.get('/:name/raw/:ref/*', raw);
-app.get('/:name/commits/:ref', history);
-app.get('/:name/:format/:ref', archive);
-app.get('/:name/description', description);
-app.post('/:name/description', description);
+app.on('listening', setup);
+app.on('mount', setup);
