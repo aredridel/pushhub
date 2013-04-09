@@ -207,21 +207,25 @@ function description(req, res) {
     }
 }
 
-function setup() {
-  app.locals.app = app;
-
-  if(!arguments.length) {
-    app.route = '/';
-  }
+function setup(parent) {
+  app.locals.app = parent || app;
 
   // Setting up pushover
   var gitRoot = app.get('git root');
   gitServer = pushover(gitRoot);
 
-  function register(dir) {
-    var p = join(gitRoot, dir);
-    repos[dir] = new Repo(p);
-    cache(repos[dir]);
+  function register() {
+    fs.readdirSync(gitRoot).forEach(function(dir) {
+      var p = join(gitRoot, dir);
+
+      if(!utils.isGitDir(p)) { return; }
+
+      if(!repos[dir]) {
+        debug('Registering "%s"', dir);
+        repos[dir] = new Repo(p);
+        cache(repos[dir]);
+      }
+    });
   }
 
   gitServer.on('create', function(dir) {
@@ -236,14 +240,8 @@ function setup() {
     push.accept();
   });
 
-  fs.watch(gitRoot, function() {
-    fs.readdirSync(gitRoot).forEach(function(dir) {
-      if(!repos[dir]) {
-        debug('Registering "%s"', dir);
-        register(dir);
-      }
-    });
-  });
+  fs.watch(gitRoot, register);
+  register();
 
   app.use(express.bodyParser());
   app.use(express.favicon());
