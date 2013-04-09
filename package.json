@@ -1,7 +1,7 @@
 {
     "name": "pushhub",
     "description": "A github inspired interface to browse your Git repositories, built on top of expressjs and pushover",
-    "version": "0.3.4",
+    "version": "0.3.5",
     "repository": {
         "type": "git",
         "url": "git://github.com/shinuza/pushhub.git"
