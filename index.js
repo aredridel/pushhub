@@ -78,62 +78,66 @@ function tree(req, res) {
 }
 
 function blob(req, res) {
-    var name = req.params.name
-      , ref = req.params.ref || 'master'
-      , path = req.params[0]
-      , repo = repos[name]
-      , parents = utils.parents(name, ref, path)
-      , rawURL = req.url.replace('blob', 'raw')
-      , filetype = Extensions[extname(path)];
+  var name = req.params.name
+    , ref = req.params.ref || 'master'
+    , path = req.params[0]
+    , repo = repos[name]
+    , parents = utils.parents(name, ref, path)
+    , rawURL = req.url.replace('blob', 'raw')
+    , filetype = Extensions[extname(path)];
 
   var branches = repo.branches.bind(repo)
     , tags = repo.tags.bind(repo);
 
-    if(repo) {
-      async.parallel([branches, tags], function(err, results) {
-        if(err) { throw err; }
+  function fof() {
+    res.status(404).render('404.jade');
+  }
 
-        repo.blob(ref, path, function(err, data) {
-          if(err) { throw err; }
+  if(repo) {
+    async.parallel([branches, tags], function(err, results) {
+      if(err) { throw err; }
 
-          res.render('blob.jade', {
-              view: 'blob'
-            , repo: name
-            , ref: ref
-            , parents: parents
-            , data: data
-            , filetype: filetype
-            , rawURL: rawURL
-            , mime: mime.lookup(path)
-            , description: repo.description()
-            , branches: results[0]
-            , tags: results[1]
-          });
+      repo.blob(ref, path, function(err, data) {
+        if(err) { return fof(); }
+
+        res.render('blob.jade', {
+            view: 'blob'
+          , repo: name
+          , ref: ref
+          , parents: parents
+          , data: data
+          , filetype: filetype
+          , rawURL: rawURL
+          , mime: mime.lookup(path)
+          , description: repo.description()
+          , branches: results[0]
+          , tags: results[1]
         });
       });
-    } else {
-      res.status(404).render('404.jade');
-    }
+    });
+  } else {
+    fof()
+  }
 }
 
 function raw(req, res) {
-    var name = req.params.name,
-        ref = req.params.ref || 'master',
-        path = req.params[0],
-        repo = repos[name];
+  var name = req.params.name
+    , ref = req.params.ref || 'master'
+    , path = req.params[0]
+    , repo = repos[name];
 
-    if(repo) {
-        repo.blob(ref, path, function(err, data) {
-            if(err) { throw err; }
-            var m = mime.lookup(path);
-            if(m.indexOf('text') === 0) { m = 'text/plain'; }
-            res.setHeader('content-type', m);
-            res.end(data);
-        });
+  if(repo) {
+    repo.blob(ref, path, function(err, data) {
+      if(err) { throw err; }
 
-    } else {
-        res.render('404.jade');
-    }
+      var m = mime.lookup(path);
+      if(m.indexOf('text') === 0) { m = 'text/plain'; }
+      res.setHeader('content-type', m);
+      res.end(data);
+    });
+  } else {
+    res.status(404).render('404.jade');
+  }
 }
 
 function history(req, res) {
