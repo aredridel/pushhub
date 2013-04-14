@@ -141,43 +141,45 @@ function raw(req, res) {
 }
 
 function history(req, res) {
-    var name = req.params.name,
-        ref = req.params.ref,
-        page = parseInt(req.query['page'], 10),
-        skip = 0,
-        repo = repos[name],
-        bypage = app.get('history by page');
+  var name = req.params.name
+    , ref = req.params.ref
+    , page = Number(req.query.page || 1)
+    , bypage = app.get('history by page')
+    , skip = (page - 1) * bypage
+    , repo = repos[name];
 
-    if(!isNaN(page)) {
-        skip = (page - 1) * bypage;
-    } else {
-        page = 1;
-    }
+  var branches = repo.branches.bind(repo)
+    , tags = repo.tags.bind(repo)
+    , total = repo.total.bind(repo, ref);
 
-    var count = repo.cache.get('total:' + ref);
-    var next = page * bypage + bypage <= count ? page + 1 : null;
-    var previous = page * bypage - bypage > 0 ? page - 1 : null;
+  if(repo) {
+    async.parallel([branches, tags, total], function(err, results) {
+      if(err) { throw err; }
 
-    if(repo) {
-        repo.stats(ref, '.', { maxcount: bypage, skip: skip}, function(err, entry) {
-            if(err) { throw err; }
-            res.render('history.jade', {
-                'view': 'history',
-                'repo': name,
-                'ref': ref,
-                'description': repo.description(),
-                'current': page,
-                'pages': Math.floor(count / bypage),
-                'next': next,
-                'previous': previous,
-                'history': entry.commits.asArray(),
-                'branches': repo.cache.get('branches'),
-                'tags': repo.cache.get('tags')
-            });
+      var count = results[2]
+        , next = page * bypage + bypage <= count ? page + 1 : null
+        , previous = page * bypage - bypage > 0 ? page - 1 : null;
+
+      repo.stats(ref, '.', { maxcount: bypage, skip: skip}, function(err, entry) {
+        if(err) { throw err; }
+        res.render('history.jade', {
+          view: 'history',
+          repo: name,
+          ref: ref,
+          current: page,
+          pages: Math.floor(count / bypage),
+          next: next,
+          previous: previous,
+          description: repo.description(),
+          history: entry.commits.asArray(),
+          branches: results[0],
+          tags: results[1]
         });
-    } else {
-        res.render('404.jade')
-    }
+      });
+    });
+  } else {
+    res.status(404).render('404.jade')
+  }
 }
 
 function archive(req, res) {
