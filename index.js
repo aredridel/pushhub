@@ -34,7 +34,6 @@ function home(req, res) {
 
   async.map(Object.keys(repos), mtime, function(err, repos) {
     res.render('home.jade',  { repos: repos });
-    res.send('ok desu')
   });
 }
 
