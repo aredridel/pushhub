@@ -1,6 +1,5 @@
 "use strict";
 
-var path = require('path');
 var fs = require('fs');
 
 var express = require('express');
@@ -13,8 +12,8 @@ var Repo = require('./lib/repo');
 var utils = require('./lib/utils');
 var middleware = require('./lib/middleware.js');
 
-var join = path.join;
-var extname = path.extname;
+var join = require('path').join;
+var extname = require('path').extname;
 var debug = require('debug')('pushhub');
 
 var gitServer;
@@ -39,9 +38,9 @@ function home(req, res) {
 
 function tree(req, res) {
   var name = req.params.name
+    , repo = repos[name]
     , ref  = req.params.ref || 'master'
     , path = req.params[0] || '.'
-    , repo = repos[name]
     , parents = utils.parents(name, ref, path);
 
   var branches = repo.branches.bind(repo)
@@ -79,9 +78,9 @@ function tree(req, res) {
 
 function blob(req, res) {
   var name = req.params.name
+    , repo = repos[name]
     , ref = req.params.ref || 'master'
     , path = req.params[0]
-    , repo = repos[name]
     , parents = utils.parents(name, ref, path)
     , rawURL = req.url.replace('blob', 'raw')
     , filetype = Extensions[extname(path)];
@@ -122,9 +121,9 @@ function blob(req, res) {
 
 function raw(req, res) {
   var name = req.params.name
+    , repo = repos[name]
     , ref = req.params.ref || 'master'
-    , path = req.params[0]
-    , repo = repos[name];
+    , path = req.params[0];
 
   if(repo) {
     repo.blob(ref, path, function(err, data) {
@@ -142,11 +141,11 @@ function raw(req, res) {
 
 function history(req, res) {
   var name = req.params.name
+    , repo = repos[name]
     , ref = req.params.ref
     , page = Number(req.query.page || 1)
     , bypage = app.get('history by page')
-    , skip = (page - 1) * bypage
-    , repo = repos[name];
+    , skip = (page - 1) * bypage;
 
   var branches = repo.branches.bind(repo)
     , tags = repo.tags.bind(repo)
@@ -184,9 +183,9 @@ function history(req, res) {
 
 function archive(req, res) {
   var name = req.params.name
+    , repo = repos[name]
     , ref = req.params.ref
-    , format = req.params.format === 'zipball' ? 'zip' : 'tar.gz'
-    , repo = repos[name];
+    , format = req.params.format === 'zipball' ? 'zip' : 'tar.gz';
 
   if(repo) {
     repo.archive(ref, format, function(err, archive) {
@@ -202,18 +201,22 @@ function description(req, res) {
   var name = req.params.name
     , repo = repos[name]
     , method = req.method
-    , description = req.body.description;
+    , description = req.body.description
+    , status = 200
+    , json = {};
 
   if(method == 'POST') {
     if(!description) {
-      res.json(400, {error: 'bad request'});
+      status = 400;
+      json = {error: 'bad request'};
     } else {
       repo.description(description);
-      res.json({ok: true});
+      json = {ok: true};
     }
   } else {
-    res.json({'description': repo.description()});
+    json = {description: repo.description()};
   }
+  res.json(status, json);
 }
 
 function setup(parent) {
