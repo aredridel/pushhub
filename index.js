@@ -6,6 +6,7 @@ var fs = require('fs');
 var express = require('express');
 var mime = require('mime');
 var pushover = require('pushover');
+var async = require('async');
 
 var Extensions = require('./lib/extensions');
 var Repo = require('./lib/repo');
@@ -23,17 +24,18 @@ var app = module.exports = express();
 // Actions
 
 function home(req, res) {
-  var repo, date;
-
-  for (var entry in repos) {
-    repo = repos[entry];
-    date = repo.cache.get('mtime').toString().split(' ');
-
-    repo.mtime = date.slice(1, -2).join(' ');
-
-    repos[entry] = repo;
+  function mtime(key, cb) {
+    var repo = repos[key];
+    repo.mtime(function(err, date) {
+      repo.last_updated = date;
+      cb(err, repo);
+    });
   }
-  res.render('home.jade',  { repos: repos });
+
+  async.map(Object.keys(repos), mtime, function(err, repos) {
+    res.render('home.jade',  { repos: repos });
+    res.send('ok desu')
+  });
 }
 
 function tree(req, res) {
@@ -194,12 +196,9 @@ function setup(parent) {
     fs.readdirSync(gitRoot).forEach(function(dir) {
       var p = join(gitRoot, dir);
 
-      if(!utils.isGitDir(p)) { return; }
-
-      if(!repos[dir]) {
+      if(!repos[dir] && utils.isGitDir(p)) {
         debug('Registering "%s"', dir);
         repos[dir] = new Repo(p);
-        cache(repos[dir]);
       }
     });
   }
