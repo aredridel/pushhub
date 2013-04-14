@@ -1,53 +1,53 @@
 {
-    "name": "pushhub",
-    "description": "A github inspired interface to browse your Git repositories, built on top of expressjs and pushover",
-    "version": "0.3.5",
-    "repository": {
-        "type": "git",
-        "url": "git://github.com/shinuza/pushhub.git"
-    },
-    "maintainers": [
-        {
-            "name": "Samori Gorse",
-            "email": "samorigorse@gmail.com",
-            "web": "http://github.com/shinuza"
-        }
-    ],
-    "licenses": [
-        {
-            "type": "MIT",
-            "url": "http://www.opensource.org/licenses/MIT"
-        }
-    ],
-    "keywords": [
-        "versioning",
-        "dvcs",
-        "git",
-        "push",
-        "http",
-        "repository"
-    ],
-    "bin" : {
-        "pushhub": "./bin/pushhub.js"
-    },
-    "scripts": {
-       "test": "mocha -R spec"
-    },
-    "main": "index",
-    "dependencies": {
-        "express": "*",
-        "mime": "*",
-        "commander": "0.5.x",
-        "jade": "*",
-        "debug": "*",
-        "pushover": "git://github.com/shinuza/pushover.git#master"
-    },
-    "devDependencies": {
-        "mocha": "*"
-    },
-    "engines": {
-        "node": ">=0.4.0"
-    },
-    "license": "MIT"
+  "name": "pushhub",
+  "description": "A github inspired interface to browse your Git repositories, built on top of expressjs and pushover",
+  "version": "0.3.5",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/shinuza/pushhub.git"
+  },
+  "maintainers": [
+    {
+      "name": "Samori Gorse",
+      "email": "samorigorse@gmail.com",
+      "web": "http://github.com/shinuza"
+    }
+  ],
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://www.opensource.org/licenses/MIT"
+    }
+  ],
+  "keywords": [
+    "versioning",
+    "dvcs",
+    "git",
+    "push",
+    "http",
+    "repository"
+  ],
+  "bin": {
+    "pushhub": "./bin/pushhub.js"
+  },
+  "scripts": {
+    "test": "mocha -R spec"
+  },
+  "main": "index",
+  "dependencies": {
+    "express": "*",
+    "mime": "*",
+    "commander": "0.5.x",
+    "jade": "*",
+    "debug": "*",
+    "pushover": "git://github.com/shinuza/pushover.git#master",
+    "async": "~0.2.7"
+  },
+  "devDependencies": {
+    "mocha": "*"
+  },
+  "engines": {
+    "node": ">=0.4.0"
+  },
+  "license": "MIT"
 }
-
