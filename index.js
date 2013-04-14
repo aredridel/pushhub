@@ -20,30 +20,6 @@ var gitServer;
 var repos = {};
 var app = module.exports = express();
 
-// Helpers
-
-function cache(repo) {
-    repo.mtime(utils.noop);
-
-    repo.branches(function(err, branches) {
-      if(branches) {
-        branches.forEach(function(branch) {
-          repo.total(branch, utils.noop);
-          repo.tip(branch, utils.noop);
-        });
-      }
-    });
-
-    repo.tags(function(err, tags) {
-      if(tags) {
-        tags.forEach(function(tag) {
-          repo.total(tag, utils.noop);
-          repo.tip(tag, utils.noop);
-        });
-      }
-    });
-}
-
 // Actions
 
 function home(req, res) {
