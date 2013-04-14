@@ -7,8 +7,8 @@ var mime = require('mime');
 var pushover = require('pushover');
 var async = require('async');
 
-var Extensions = require('./lib/extensions');
 var Repo = require('./lib/repo');
+var extensions = require('./lib/extensions');
 var utils = require('./lib/utils');
 var middleware = require('./lib/middleware.js');
 
@@ -83,7 +83,7 @@ function blob(req, res) {
     , path = req.params[0]
     , parents = utils.parents(name, ref, path)
     , rawURL = req.url.replace('blob', 'raw')
-    , filetype = Extensions[extname(path)];
+    , filetype = extensions[extname(path)];
 
   var branches = repo.branches.bind(repo)
     , tags = repo.tags.bind(repo);
