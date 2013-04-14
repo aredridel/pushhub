@@ -199,20 +199,21 @@ function archive(req, res) {
 }
 
 function description(req, res) {
-    var name = req.params.name,
-        repo = repos[name],
-        method = req.method,
-        description = req.body.description;
+  var name = req.params.name
+    , repo = repos[name]
+    , method = req.method
+    , description = req.body.description;
 
-    if(method == 'POST') {
-        if(!description) {
-            return res.send(400);
-        }
-        repo.description(description);
-        return res.json({ok: true});
+  if(method == 'POST') {
+    if(!description) {
+      res.json(400, {error: 'bad request'});
     } else {
-        res.json({'description': repo.description()});
+      repo.description(description);
+      res.json({ok: true});
     }
+  } else {
+    res.json({'description': repo.description()});
+  }
 }
 
 function setup(parent) {
