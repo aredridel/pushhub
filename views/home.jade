@@ -9,4 +9,4 @@ block content
                 h3
                     a(href= app.route + repo.name) #{repo.name}
                 p.description(data-repo=repo.name)= repo.description()
-                p Last updated: #{repo.mtime}
+                p Last updated: #{repo.last_updated}
