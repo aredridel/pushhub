@@ -183,19 +183,19 @@ function history(req, res) {
 }
 
 function archive(req, res) {
-    var name = req.params.name,
-        ref = req.params.ref,
-        format = req.params.format === 'zipball' ? 'zip' : 'tar.gz',
-        repo = repos[name];
+  var name = req.params.name
+    , ref = req.params.ref
+    , format = req.params.format === 'zipball' ? 'zip' : 'tar.gz'
+    , repo = repos[name];
 
-    if(repo) {
-        repo.archive(ref, format, function(err, archive) {
-            if(err) { throw err; }
-            res.end(archive);
-        });
-    } else {
-        res.render('404.jade');
-    }
+  if(repo) {
+    repo.archive(ref, format, function(err, archive) {
+      if(err) { throw err; }
+      res.end(archive);
+    });
+  } else {
+    res.status(404).render('404.jade');
+  }
 }
 
 function description(req, res) {
