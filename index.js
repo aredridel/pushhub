@@ -38,29 +38,35 @@ function home(req, res) {
 }
 
 function tree(req, res) {
-    var name = req.params.name,
-        ref = req.params.ref || 'master',
-        path = req.params[0] || '.',
-        repo = repos[name];
+  var name = req.params.name
+    , ref  = req.params.ref || 'master'
+    , path = req.params[0] || '.'
+    , repo = repos[name]
+    , parents = utils.parents(name, ref, path);
 
-    if(repo) {
-        repo.tree(ref, path, function(err, items) {
-            if(err || !items.length) { return res.render('404.jade'); }
-            res.render('tree.jade', {
-                'view': 'tree',
-                'repo': name,
-                'description': repo.description(),
-                'ref': ref,
-                'commit': repo.cache.get('tip:' + ref),
-                'parents': utils.parents(name, ref, path),
-                'items': items,
-                'branches': repo.cache.get('branches'),
-                'tags': repo.cache.get('tags')
-            });
+  if(repo) {
+    repo.tree(ref, path, function(err, items) {
+      if(err) { throw err; }
+
+      if(items.length === 0) {
+        res.status(404).render('404.jade');
+      } else {
+        res.render('tree.jade', {
+          view: 'tree',
+          repo: name,
+          ref: ref,
+          parents: parents,
+          items: items,
+          description: repo.description(),
+          commit: repo.cache.get('tip:' + ref),
+          branches: repo.cache.get('branches'),
+          tags: repo.cache.get('tags')
         });
-    } else {
-        res.render('404.jade');
-    }
+      }
+    });
+  } else {
+    res.status(404).render('404.jade');
+  }
 }
 
 function blob(req, res) {
