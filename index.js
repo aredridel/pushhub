@@ -6,6 +6,7 @@ var express = require('express');
 var mime = require('mime');
 var pushover = require('pushover');
 var async = require('async');
+var marked = require('marked');
 
 var Repo = require('./lib/repo');
 var extensions = require('./lib/extensions');
@@ -98,6 +99,10 @@ function blob(req, res) {
 
       repo.blob(ref, path, function(err, data) {
         if(err) { return fof(); }
+
+        if(path.match(/.md$/i)) {
+          data = marked(data.toString());
+        }
 
         res.render('blob.jade', {
             view: 'blob'
