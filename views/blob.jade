@@ -11,6 +11,8 @@ block content
         div.preview
             if mime.indexOf('image') == 0
                 img(src=rawURL)
+            else if mime == 'text/x-markdown'
+                !{data}
             else
                 pre(class='code sunlight-highlight-' + filetype)
                     =data.toString()
