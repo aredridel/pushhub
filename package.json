@@ -41,7 +41,8 @@
     "jade": "*",
     "debug": "*",
     "pushover": "git://github.com/shinuza/pushover.git#master",
-    "async": "~0.2.7"
+    "async": "~0.2.7",
+    "marked": "~0.2.8"
   },
   "devDependencies": {
     "mocha": "*"

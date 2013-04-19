@@ -6,6 +6,7 @@ var express = require('express');
 var mime = require('mime');
 var pushover = require('pushover');
 var async = require('async');
+var marked = require('marked');
 
 var Repo = require('./lib/repo');
 var extensions = require('./lib/extensions');
@@ -99,6 +100,10 @@ function blob(req, res) {
       repo.blob(ref, path, function(err, data) {
         if(err) { return fof(); }
 
+        if(path.match(/.md$/i)) {
+          data = marked(data.toString());
+        }
+
         res.render('blob.jade', {
             view: 'blob'
           , repo: name
@@ -133,6 +138,26 @@ function raw(req, res) {
       if(m.indexOf('text') === 0) { m = 'text/plain'; }
       res.setHeader('content-type', m);
       res.end(data);
+    });
+  } else {
+    res.status(404).render('404.jade');
+  }
+}
+
+function preview(req, res) {
+  var repo = repos[req.params.name]
+    , ref = req.params.ref || 'master'
+    , path = req.params[0];
+
+  if(repo) {
+    repo.blob(ref, path, function(err, data) {
+      if(err) { throw err; }
+
+      if(path.match(/.md$/i)) {
+        data = marked(data.toString());
+      }
+
+      res.json({data: data, path: path});
     });
   } else {
     res.status(404).render('404.jade');
@@ -265,6 +290,7 @@ function setup(parent) {
   app.get('/:name/tree/:ref/*', tree);
   app.get('/:name/blob/:ref/*', blob);
   app.get('/:name/raw/:ref/*', raw);
+  app.get('/:name/preview/:ref/*', preview);
   app.get('/:name/commits/:ref', history);
   app.get('/:name/:format/:ref', archive);
   app.get('/:name/description', description);
