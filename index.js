@@ -144,6 +144,26 @@ function raw(req, res) {
   }
 }
 
+function preview(req, res) {
+  var repo = repos[req.params.name]
+    , ref = req.params.ref || 'master'
+    , path = req.params[0];
+
+  if(repo) {
+    repo.blob(ref, path, function(err, data) {
+      if(err) { throw err; }
+
+      if(path.match(/.md$/i)) {
+        data = marked(data.toString());
+      }
+
+      res.json({data: data, path: path});
+    });
+  } else {
+    res.status(404).render('404.jade');
+  }
+}
+
 function history(req, res) {
   var name = req.params.name
     , repo = repos[name]
@@ -270,6 +290,7 @@ function setup(parent) {
   app.get('/:name/tree/:ref/*', tree);
   app.get('/:name/blob/:ref/*', blob);
   app.get('/:name/raw/:ref/*', raw);
+  app.get('/:name/preview/:ref/*', preview);
   app.get('/:name/commits/:ref', history);
   app.get('/:name/:format/:ref', archive);
   app.get('/:name/description', description);
