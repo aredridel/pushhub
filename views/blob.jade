@@ -12,7 +12,8 @@ block content
             if mime.indexOf('image') == 0
                 img(src=rawURL)
             else if mime == 'text/x-markdown'
-                !{data}
+                div.padding15
+                    !{data}
             else
                 pre(class='code sunlight-highlight-' + filetype)
                     =data.toString()
