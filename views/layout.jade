@@ -4,7 +4,7 @@ html
         title Pushhub
         link(rel="stylesheet", type="text/css", href=app.route + "stylesheets/main.css")
         link(rel="stylesheet", type="text/css", href=app.route + "stylesheets/sunlight.default.css")
-    body
+    body(data-repo=repo, data-ref=ref, data-view=view)
         block content
 
         script(src=app.route + "javascripts/jquery-1.7.2.min.js")
