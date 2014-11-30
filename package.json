@@ -35,14 +35,15 @@
   },
   "main": "index",
   "dependencies": {
-    "express": "*",
-    "mime": "*",
-    "commander": "0.5.x",
-    "jade": "*",
-    "debug": "*",
-    "pushover": "git://github.com/shinuza/pushover.git#master",
-    "async": "~0.2.7",
-    "marked": "~0.2.8"
+    "async": "^0.2.10",
+    "commander": "^0.5.2",
+    "debug": "^2.1.0",
+    "express": "^3.18.4",
+    "jade": "^0.34.1",
+    "marked": "~0.2.8",
+    "mime": "^1.2.11",
+    "mocha": "^2.0.1",
+    "pushover": "git://github.com/shinuza/pushover.git#master"
   },
   "devDependencies": {
     "mocha": "*"
